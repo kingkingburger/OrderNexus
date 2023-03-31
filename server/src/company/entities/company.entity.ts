@@ -5,9 +5,9 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from "typeorm";
-import { Order } from "../../order/entities/order.entity";
+  UpdateDateColumn,
+} from 'typeorm';
+import { Order } from '../../order/entities/order.entity';
 
 @Entity()
 export class Company {
@@ -33,7 +33,7 @@ export class Company {
   phone: string;
 
   @Column()
-  fix: string;
+  fax: string;
 
   @OneToMany(() => Order, (order) => order.id)
   orderId: Order[];

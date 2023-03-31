@@ -1,4 +1,4 @@
-import { companyApi, header, Order } from "../companyTable";
+import { Order } from "../companyTable";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
@@ -28,45 +28,48 @@ const CompanyInsertModal = ({
   const [name, setName] = useState("");
   const [ceoName, setCeoName] = useState("");
   const [address, setAddress] = useState("");
+  const [itemName, setItemName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0);
   const [addressNumber, setAddressNumber] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [fax, setFax] = useState("");
+  const [count, setCount] = useState(0);
 
   useEffect(() => {}, []);
+
+  const resetStates = () => {
+    setName("");
+    setCeoName("");
+    setAddress("");
+    setItemName("");
+    setDescription("");
+    setPrice(0);
+    setAddressNumber("");
+    setPhone("");
+    setEmail("");
+    setFax("");
+    setCount(0);
+  };
 
   const insertAction = async () => {
     const insertParam = {
       name: name,
-      code: new Date(),
-      ccIdCompanyType: 31,
-      group: "코드공장",
-      registrationNumber: "",
-      corporationNumber: "",
-      ceoName: "거래처",
+      ceoName: ceoName,
+      email: email,
+      address: address,
+      addressNumber: addressNumber,
       phone: phone,
-      fax: "0123-12314-12314",
-      email: "",
-      homepage: "",
-      zipCode: "",
-      address1: "",
-      address2: "",
-      tags: ["원자재"],
-      description: "",
-      companyGroupIds: [],
+      fax: fax,
     };
 
-    console.log("companyApi = ", companyApi);
-    console.log("insertParam = ", insertParam);
-    console.log("header = ", header);
     const result = await axios.post<insertParamType>(
-      "http://localhost:3030/companies",
-      insertParam,
-      {
-        headers: header,
-      }
+      "http://localhost:3586/company",
+      insertParam
     );
     console.log("result = ", result);
+    resetStates();
     onClose();
   };
 

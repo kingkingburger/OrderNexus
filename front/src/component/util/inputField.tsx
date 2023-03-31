@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 interface InputFieldProps {
-  controlId: string;
-  label: string;
-  value: string;
-  placeholder: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  controlId?: string;
+  label?: string;
+  type?: string;
+  value?: string | number;
+  placeholder?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 const InputField = ({
   controlId,

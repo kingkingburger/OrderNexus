@@ -12,34 +12,46 @@ interface ColumnType {
 }
 
 export const companyTableColumn: Array<ColumnType> = [
-  {
-    caption: "순번", // 순번
-    name: "index",
-    dataType: "number",
-    alignment: "center",
-    cellTemplate: function (container, options) {
-      container.innerText = options.rowIndex + 1;
-    },
-  },
-  {
-    caption: "사업장코드",
-    dataField: "code",
-  },
+  // {
+  //   caption: "순번", // 순번
+  //   name: "index",
+  //   dataType: "number",
+  //   alignment: "center",
+  //   cellTemplate: function (container, options) {
+  //     container.innerText = options.rowIndex + 1;
+  //   },
+  // },
+  // {
+  //   caption: "사업장코드",
+  //   dataField: "code",
+  // },
   {
     caption: "사업장이름",
     dataField: "name",
+  },
+  {
+    caption: "사업자 대표이름",
+    dataField: "ceoName",
   },
   {
     caption: "전화번호",
     dataField: "phone",
   },
   {
-    caption: "팩스번호",
-    dataField: "fax",
+    caption: "주소",
+    dataField: "address",
+  },
+  {
+    caption: "우편번호",
+    dataField: "addressNumber",
   },
   {
     caption: "이메일",
     dataField: "email",
+  },
+  {
+    caption: "팩스번호",
+    dataField: "fax",
   },
   {
     caption: "등록일",

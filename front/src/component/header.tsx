@@ -1,6 +1,6 @@
 import React from "react";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Link, NavLink } from "react-router-dom";
+import {Container, Nav, Navbar} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 const Header = () => {
   return (
@@ -12,12 +12,12 @@ const Header = () => {
           <Nav className="me-auto">
             <Link className="nav-link" to="/">
               <button type="button" className="btn btn-info">
-                거래처
+                주문관리
               </button>
             </Link>
-            <Link className="nav-link" to="/order">
+            <Link className="nav-link" to="/company">
               <button type="button" className="btn btn-success">
-                주문관리
+                거래처
               </button>
             </Link>
           </Nav>
