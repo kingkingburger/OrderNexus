@@ -12,8 +12,9 @@ import { Format } from "devextreme/localization";
 import { orderTableColumn } from "../order/column/orderTableColumn";
 import { dataResponse } from "../../App";
 import OrderInfoModal from "../order/modal/orderInfoModal";
-import Header from "../header";
 import { Container } from "react-bootstrap";
+import { companyApi } from "../company/companyTable";
+import OrderInsertModal from "./modal/orderInsertModal";
 
 export interface Order {
   id?: number;
@@ -80,18 +81,15 @@ export interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
+export const orderApi = "http://localhost:3586/order";
+
 const OrderTable = () => {
   const [row, setRow] = useState<any>([]); // 4번)
   const [column, setColumn] = useState<Array<ColumnType>>([]); // 4번)
+  const [companyData, setCompanyData] = useState<any>([]); // 4번)
   const [clickRow, setClickRow] = useState({} as Order);
   const [showModal, setShowModal] = useState(false);
-
-  // const api = "http://220.90.131.48:3030/order-sheets";
-  const api = "http://localhost:3030/order-sheets";
-  const header = {
-    "access-token":
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29tcGFueUlkIjpudWxsLCJ1c2VyaWQiOiJzeXN0ZW0iLCJuYW1lIjoi7Iuc7Iqk7YWc6rSA66as7J6QIiwiYXV0aCI6InN5c3RlbSIsImlhdCI6MTY3NTg0MDQ4MSwiZXhwIjoxOTkxNDE2NDgxfQ.Dfj9ibLc_mi5tsQ5Oo1cLh9HZ_uHcMf93pc12G4Z8js",
-  };
+  const [insertShowModal, setInsertShowModal] = useState(false);
 
   //모달열기
   const openModal = (e: any) => {
@@ -100,21 +98,34 @@ const OrderTable = () => {
     setClickRow(selectRow);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setShowModal(false);
+    setInsertShowModal(false);
+    const result = await axios.get<dataResponse>(orderApi, {
+      params: {},
+    });
+    setRow(result.data);
+  };
+
+  const openInsertModal = (e: any) => {
+    setInsertShowModal(true);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get<dataResponse>(api, {
+      const result = await axios.get<dataResponse>(orderApi, {
         params: {},
-        headers: header,
       });
 
-      setRow(result.data.data.rows);
-
+      setRow(result.data);
       const col: Array<ColumnType> = orderTableColumn;
       setColumn(col);
+
+      // 거래처 정보를 가지고옴
+      const companyResult = await axios.get<dataResponse>(companyApi, {
+        params: {},
+      });
+      setCompanyData(companyResult.data);
     };
 
     fetchData(); // 6번) 반드시 함수를 호출해야만 async함수가 실행되는 것 잊지말기!
@@ -122,6 +133,7 @@ const OrderTable = () => {
 
   return (
     <Container>
+      <button onClick={openInsertModal}>주문 입력</button>
       <DataGrid
         dataSource={row}
         columns={column}
@@ -143,11 +155,19 @@ const OrderTable = () => {
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
       </DataGrid>
 
+      <OrderInsertModal
+        isOpen={insertShowModal}
+        onClose={closeModal}
+        onSubmit={() => console.log("Submit")}
+        title="주문 입력"
+        data={companyData}
+      ></OrderInsertModal>
+
       <OrderInfoModal
         isOpen={showModal}
         onClose={closeModal}
         onSubmit={() => console.log("Submit")}
-        title="Modal Title"
+        title="주문 상세"
         data={clickRow}
       />
     </Container>

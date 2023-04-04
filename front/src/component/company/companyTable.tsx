@@ -80,12 +80,12 @@ interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
-export const companyApi = "http://220.90.131.48:3030/companies";
+export const companyApi = "http://localhost:3586/company";
 export const header = {
   "access-token":
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29tcGFueUlkIjpudWxsLCJ1c2VyaWQiOiJzeXN0ZW0iLCJuYW1lIjoi7Iuc7Iqk7YWc6rSA66as7J6QIiwiYXV0aCI6InN5c3RlbSIsImlhdCI6MTY3NTg0MDQ4MSwiZXhwIjoxOTkxNDE2NDgxfQ.Dfj9ibLc_mi5tsQ5Oo1cLh9HZ_uHcMf93pc12G4Z8js",
 };
-export const orderApi = "http://220.90.131.48:3030/order-sheets";
+export const orderApi = "http://localhost:3586/order";
 const CompanyTable = () => {
   const [row, setRow] = useState<any>([]);
   const [orderRow, setOrderRow] = useState<any>([]);
@@ -103,9 +103,14 @@ const CompanyTable = () => {
     setClickRow(selectRow);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setShowModal(false);
     setInsertShowModal(false);
+    // 모달창이 닫히면 테이블 리랜더링
+    const result = await axios.get<dataResponse>(companyApi, {
+      params: {},
+    });
+    setRow(result.data);
   };
 
   const openInsertModal = (e: any) => {
@@ -116,15 +121,12 @@ const CompanyTable = () => {
     const fetchData = async () => {
       const result = await axios.get<dataResponse>(companyApi, {
         params: {},
-        headers: header,
       });
-      setRow(result.data.data.rows);
-
+      setRow(result.data);
       const orderResult = await axios.get<dataResponse>(orderApi, {
         params: {},
-        headers: header,
       });
-      setOrderRow(orderResult.data.data.rows);
+      setOrderRow(orderResult.data);
 
       const col: Array<ColumnType> = companyTableColumn;
       setColumn(col);
@@ -161,7 +163,7 @@ const CompanyTable = () => {
         isOpen={insertShowModal}
         onClose={closeModal}
         onSubmit={() => console.log("Submit")}
-        title="거래처 주문 상세정보"
+        title="거래처 주문 입력"
         data={clickRow}
       ></CompanyInsertModal>
 

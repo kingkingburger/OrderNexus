@@ -42,6 +42,7 @@ const CompanyInfoModal = ({
       contentLabel="주문 상세"
       ariaHideApp={false}
     >
+
       <h1>{title}</h1>
 
       <DataGrid

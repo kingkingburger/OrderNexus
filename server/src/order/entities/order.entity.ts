@@ -22,16 +22,28 @@ export class Order {
   name: string;
 
   @Column()
-  orderDate: Date;
+  itemName: string;
 
   @Column()
-  expectDate: Date;
+  price: number;
+
+  @Column()
+  count: number;
+
+  @Column({ default: 10 })
+  tax: number;
+
+  @Column()
+  description: string;
+
+  @Column()
+  orderDate: Date;
 
   @ManyToOne(() => Company, (company) => company.id)
   @JoinColumn({ name: "company_id" })
   company: Company;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "date" })
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;

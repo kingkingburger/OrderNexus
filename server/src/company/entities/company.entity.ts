@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn
@@ -33,10 +34,10 @@ export class Company {
   phone: string;
 
   @Column()
-  fix: string;
+  fax: string;
 
   @OneToMany(() => Order, (order) => order.id)
-  orderId: Order[];
+  order: Order[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -22,8 +22,8 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/" element={<CompanyTable />} />
-        <Route path="/order" element={<OrderTable />} />
+        <Route path="/" element={<OrderTable />} />
+        <Route path="/company" element={<CompanyTable  />} />
       </Routes>
     </BrowserRouter>
   );
