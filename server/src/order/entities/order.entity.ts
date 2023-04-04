@@ -6,7 +6,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 import { Company } from "../../company/entities/company.entity";
 
@@ -39,7 +39,7 @@ export class Order {
   @Column()
   orderDate: Date;
 
-  @ManyToOne(() => Company, (company) => company.id)
+  @ManyToOne(() => Company, (company) => company.orders)
   @JoinColumn({ name: "company_id" })
   company: Company;
 

@@ -6,8 +6,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
-import { Order } from '../../order/entities/order.entity';
+} from "typeorm";
+import { Order } from "../../order/entities/order.entity";
 
 @Entity()
 export class Company {
@@ -35,8 +35,8 @@ export class Company {
   @Column()
   fax: string;
 
-  @OneToMany(() => Order, (order) => order.id)
-  orderId: Order[];
+  @OneToMany(() => Order, (order) => order.company)
+  orders: Order[];
 
   @CreateDateColumn()
   createdAt: Date;
