@@ -12,25 +12,17 @@ interface ColumnType {
 }
 
 export const orderTableColumn: Array<ColumnType> = [
-  // {
-  //   caption: "순번", // 순번
-  //   name: "index",
-  //   dataType: "number",
-  //   alignment: "center",
-  //   cellTemplate: function (container, options) {
-  //     container.innerText = options.rowIndex + 1;
-  //   },
-  // },
   {
-    caption: "등록일",
-    dataField: "createdAt",
+    caption: "주문 접수일",
+    dataField: "orderDate",
     dataType: "date",
     format: "yyyy-MM-dd",
   },
   // {
-  //   caption: "주문코드",
-  //   dataField: "code",
-  //   dataType: "string",
+  //   caption: "등록일",
+  //   dataField: "createdAt",
+  //   dataType: "date",
+  //   format: "yyyy-MM-dd",
   // },
   {
     caption: "주문명",
@@ -43,44 +35,64 @@ export const orderTableColumn: Array<ColumnType> = [
     dataType: "string",
   },
   {
+    caption: "단가",
+    dataField: "unitPrice",
+    dataType: "number",
+  },
+  {
     caption: "가격",
     dataField: "price",
     dataType: "number",
   },
   {
-    caption: "개수",
+    caption: "부가세",
+    dataField: "vat",
+    dataType: "number",
+  },
+  {
+    caption: "수량",
     dataField: "count",
     dataType: "number",
   },
   {
-    caption: "비고",
-    dataField: "description",
+    caption: "수금",
+    dataField: "receivePrice",
     dataType: "number",
   },
   {
-    caption: "거래처명",
+    caption: "잔액",
+    dataField: "tax",
+    dataType: "number",
+  },
+  {
+    caption: "합계금액",
+    dataField: "resultPrice",
+    dataType: "number",
+  },
+
+  {
+    caption: "거래처",
     dataField: "company.name",
     dataType: "string",
   },
+  // {
+  //   caption: "거래처 전화번호",
+  //   dataField: "company.phone",
+  //   dataType: "string",
+  // },
+  // {
+  //   caption: "거래처 우편번호",
+  //   dataField: "company.addressNumber",
+  //   dataType: "string",
+  // },
+  // {
+  //   caption: "거래처 주소",
+  //   dataField: "company.address",
+  //   dataType: "string",
+  // },
   {
-    caption: "거래처명 전화번호",
-    dataField: "company.phone",
-    dataType: "string",
-  },
-  {
-    caption: "거래처명 우편번호",
-    dataField: "company.addressNumber",
-    dataType: "string",
-  },
-  {
-    caption: "거래처명 주소",
-    dataField: "company.address",
-    dataType: "string",
-  },
-  {
-    caption: "주문 접수일",
-    dataField: "orderDate",
-    dataType: "date",
-    format: "yyyy-MM-dd",
+    caption: "비고",
+    dataField: "description",
+    dataType: "number",
   },
 ];

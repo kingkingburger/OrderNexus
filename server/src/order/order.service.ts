@@ -13,6 +13,7 @@ export class OrderService {
   ) {}
 
   create(createOrderDto: CreateOrderDto) {
+    console.log(createOrderDto);
     return this.orderRepository.save(createOrderDto);
   }
 

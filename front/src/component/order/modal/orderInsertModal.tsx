@@ -32,10 +32,17 @@ const OrderInsertModal = ({
 }: MyModalProps) => {
   const [name, setName] = useState("");
   const [itemName, setItemName] = useState("");
+  const [unitPrice, setUnitPrice] = useState(0);
   const [price, setPrice] = useState(0);
   const [count, setCount] = useState(0);
+  const [vat, setVat] = useState(0);
+  const [resultPrice, setResultPrice] = useState(0);
+  const [receivePrice, setReceivePrice] = useState(0);
+  const [tax, setTax] = useState(0);
   const [description, setDescription] = useState("");
   const [orderDate, setOrderDate] = useState("");
+
+  // 외래키
   const [company, setCompany] = useState(0);
   useEffect(() => {}, []);
 
@@ -55,7 +62,12 @@ const OrderInsertModal = ({
       name: name,
       itemName: itemName,
       price: price,
+      unitPrice: unitPrice,
       count: count,
+      vat: vat,
+      resultPrice: resultPrice,
+      receivePrice: receivePrice,
+      tax: tax,
       description: description,
       orderDate: new Date(orderDate),
       company: company,
@@ -115,6 +127,7 @@ const OrderInsertModal = ({
           {/*  placeholder="주문 명"*/}
           {/*  onChange={(e) => setName(e.target.value)}*/}
           {/*/>*/}
+
           <InputField
             controlId="formItemName"
             label="품목 명:"
@@ -122,6 +135,7 @@ const OrderInsertModal = ({
             placeholder="품목 명"
             onChange={(e) => setItemName(e.target.value)}
           />
+
           <InputField
             controlId="formPrice"
             label="가격:"
@@ -129,13 +143,55 @@ const OrderInsertModal = ({
             placeholder="품목 가격"
             onChange={(e) => setPrice(Number(e.target.value))}
           />
+
+          {/*<InputField*/}
+          {/*  controlId="formUnitPrice"*/}
+          {/*  label="단가:"*/}
+          {/*  value={unitPrice}*/}
+          {/*  placeholder="단가"*/}
+          {/*  onChange={(e) => setUnitPrice(Number(e.target.value))}*/}
+          {/*/>*/}
+
+          <InputField
+            controlId="formVat"
+            label="부가세:"
+            value={vat}
+            placeholder="부가세"
+            onChange={(e) => setVat(Number(e.target.value))}
+          />
+
+          <InputField
+            controlId="formResultPrice"
+            label="결제금액:"
+            value={resultPrice}
+            placeholder="결제금액"
+            onChange={(e) => setResultPrice(Number(e.target.value))}
+          />
+
+          <InputField
+            controlId="formReceivePrice"
+            label="수금액:"
+            value={receivePrice}
+            placeholder="수금액"
+            onChange={(e) => setReceivePrice(Number(e.target.value))}
+          />
+
+          {/*<InputField*/}
+          {/*  controlId="formTax"*/}
+          {/*  label="과세 대상 금액:"*/}
+          {/*  value={tax}*/}
+          {/*  placeholder="과세 대상 금액"*/}
+          {/*  onChange={(e) => setTax(Number(e.target.value))}*/}
+          {/*/>*/}
+
           <InputField
             controlId="formCount"
-            label="개수:"
+            label="수량:"
             value={count}
-            placeholder="품목 개수"
+            placeholder="품목 수량"
             onChange={(e) => setCount(Number(e.target.value))}
           />
+
           <InputField
             controlId="formDescription"
             label="비고:"
@@ -143,6 +199,7 @@ const OrderInsertModal = ({
             placeholder="비고"
             onChange={(e) => setDescription(e.target.value)}
           />
+
           <InputField
             controlId="formOrderDate"
             label="주문 일자:"

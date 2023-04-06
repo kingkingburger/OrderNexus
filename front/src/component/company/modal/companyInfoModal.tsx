@@ -1,5 +1,5 @@
 import ReactModal from "react-modal";
-import { Order } from "../companyTable";
+import { Company, Order } from "../companyTable";
 import {
   ColumnChooser,
   DataGrid,
@@ -8,7 +8,7 @@ import {
   GroupPanel,
 } from "devextreme-react/data-grid";
 import React, { useEffect, useState } from "react";
-import { orderTableColumn } from "../../order/column/orderTableColumn";
+import { orderTableInfoColumn } from "../../order/column/orderTableInfoColumn";
 import { ColumnType } from "../../order/orderTable";
 
 interface MyModalProps {
@@ -16,7 +16,7 @@ interface MyModalProps {
   onClose: () => void;
   onSubmit: () => void;
   title: string;
-  data: Order;
+  data: Company;
 }
 
 const CompanyInfoModal = ({
@@ -29,12 +29,15 @@ const CompanyInfoModal = ({
   const [column, setColumn] = useState<Array<ColumnType>>([]);
 
   useEffect(() => {
-    const col: Array<ColumnType> = orderTableColumn;
+    const col: Array<ColumnType> = orderTableInfoColumn;
     setColumn(col);
   }, []);
 
+
   const jsonStr2 = JSON.stringify(data, null, 2);
-  const strToJson = JSON.parse(jsonStr2);
+  const infoData = JSON.parse(jsonStr2) as Company;
+
+  console.log('infoData = ' , infoData);
   return (
     <ReactModal
       isOpen={isOpen}
@@ -45,8 +48,16 @@ const CompanyInfoModal = ({
 
       <h1>{title}</h1>
 
+      <div>거래처 이름: {infoData.name}</div>
+      <div>전화번호: {infoData.phone}</div>
+
+      <div>거래처 사장: {infoData.ceoName}</div>
+      <div>팩스번호: {infoData.fax}</div>
+      <div>주소: {infoData.address}</div>
+      <div>우편번호: {infoData.addressNumber}</div>
+
       <DataGrid
-        dataSource={strToJson}
+        dataSource={infoData.orders}
         columns={column}
         allowColumnResizing={true}
         allowColumnReordering={true}
