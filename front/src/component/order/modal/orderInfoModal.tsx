@@ -1,6 +1,8 @@
 import ReactModal from "react-modal";
-import { Order } from "../orderTable";
-
+import { ColumnType, Order } from "../orderTable";
+import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel } from "devextreme-react/data-grid";
+import React, { useEffect, useState } from "react";
+import { orderTableColumn } from "../../order/column/orderTableColumn";
 interface MyModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -16,8 +18,14 @@ const OrderInfoModal = ({
   title,
   data,
 }: MyModalProps) => {
-  const jsonStr = JSON.stringify(data.Company, null, 2);
   const jsonStr2 = JSON.stringify(data, null, 2);
+  const strToJson = JSON.parse(jsonStr2);
+  const [column, setColumn] = useState<Array<ColumnType>>([]);
+
+  useEffect(() => {
+    const col: Array<ColumnType> = orderTableColumn;
+    setColumn(col);
+  }, []);
 
   return (
     <ReactModal
@@ -26,10 +34,29 @@ const OrderInfoModal = ({
       contentLabel="주문 상세"
       ariaHideApp={false}
     >
+
       <h1>{title}</h1>
-      <div>{jsonStr}</div>
-      <p>모달안에 내용들</p>
-      <div>{jsonStr2}</div>
+
+      <DataGrid
+        dataSource={strToJson}
+        columns={column}
+        allowColumnResizing={true}
+        allowColumnReordering={true}
+        hoverStateEnabled={true}
+        showBorders={true}
+        showColumnHeaders={true}
+        showRowLines={true}
+      >
+        <Grouping></Grouping>
+        <GroupPanel
+          allowColumnDragging={true}
+          visible={true}
+          emptyPanelText={"여기에 그룹을 넣어주세요"}
+        ></GroupPanel>
+        <Editing></Editing>
+        <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
+      </DataGrid>
+
       <button onClick={onSubmit}>확인</button>
       <button onClick={onClose}>취소</button>
     </ReactModal>

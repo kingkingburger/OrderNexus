@@ -36,8 +36,8 @@ export class Company {
   @Column()
   fax: string;
 
-  @OneToMany(() => Order, (order) => order.id)
-  order: Order[];
+  @OneToMany(() => Order, (order) => order.company)
+  orders: Order[];
 
   @CreateDateColumn()
   createdAt: Date;

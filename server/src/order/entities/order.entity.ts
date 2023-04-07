@@ -15,31 +15,43 @@ export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   code: string;
 
-  @Column()
+  @Column({ nullable: true })
   name: string;
 
-  @Column()
-  itemName: string;
+  @Column({ nullable: true })
+  itemName: string; // 품목 및 규격
 
-  @Column()
-  price: number;
+  @Column({ nullable: true })
+  unitPrice: number; // 단가
 
-  @Column()
-  count: number;
+  @Column({ nullable: true })
+  price: number; // 금액
 
-  @Column({ default: 10 })
-  tax: number;
+  @Column({ nullable: true })
+  vat: number; // 부가세
 
-  @Column()
-  description: string;
+  @Column({ nullable: true })
+  count: number; // 수량
 
-  @Column()
-  orderDate: Date;
+  @Column({ nullable: true })
+  resultPrice: number; // 합계금액
 
-  @ManyToOne(() => Company, (company) => company.id)
+  @Column({ nullable: true })
+  receivePrice: number; // 수금
+
+  @Column({ default: 10, nullable: true })
+  tax: number; // 잔액
+
+  @Column({ nullable: true })
+  description: string; // 비고
+
+  @Column({ nullable: true })
+  orderDate: Date; // 일자
+
+  @ManyToOne(() => Company, (company) => company.orders)
   @JoinColumn({ name: "company_id" })
   company: Company;
 

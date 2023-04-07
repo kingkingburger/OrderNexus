@@ -18,11 +18,12 @@ export class CompanyService {
   }
 
   findAll() {
-    return this.companyRepository.find({ relations: ["order"] });
+    return this.companyRepository.find({ relations: ["orders"] });
+    // return this.companyRepository.find();
   }
 
   findOne(id: number) {
-    return this.companyRepository.findOne({ where: { id: id }, relations: ["order"] });
+    return this.companyRepository.findOne({ where: { id: id }, relations: ["orders"] });
   }
 
   update(id: number, updateCompanyDto: UpdateCompanyDto) {

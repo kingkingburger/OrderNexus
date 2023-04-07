@@ -17,58 +17,39 @@ import CompanyInsertModal from "./modal/companyInsertModal";
 
 export interface Order {
   id?: number;
-  companyId?: number;
-  partnerId?: number;
-  quotationId?: number | null;
-  partnerUserId?: number | null;
-  userId?: number;
-  confirmUserId?: number | null;
-  customerId?: number;
-  partnerCode?: string | null;
-  code?: string;
-  name?: string;
-  orderDate?: string;
-  expectedDate?: string;
-  completeDate?: string | null;
-  confirmDate?: string | null;
-  returnDate?: string | null;
-  rejectReason?: string | null;
-  state?: string;
-  image?: string | null;
-  receiverName?: string;
-  receiverAddress?: string;
-  receiverZipCode?: number;
-  receiverPhoneNumber?: string;
-  description?: string | null;
+  code: string;
+  name: string;
+  itemName: string; // 품목 및 규격
+  unitPrice: number; // 단가
+  price: number; // 금액
+  vat: number; // 부가세
+  count: number; // 수량
+  resultPrice: number; // 합계금액
+  receivePrice: number; // 수금
+  tax: number; // 잔액
+  description: string; // 비고
+  orderDate: Date; // 일자
   createdAt?: string;
   updatedAt?: string;
   deletedAt?: string | null;
-  Company?: Company;
+  company?: Company;
 }
 
 export interface Company {
   id: number;
   name: string;
   code: string;
-  ccIdCompanyType: number;
-  group: any;
-  registrationNumber: string | null;
-  corporationNumber: string | null;
-  ceoName: string | null;
-  businessType: string | null;
-  businessItem: string | null;
-  phone: string | null;
-  fax: string | null;
-  email: string | null;
-  homepage: string | null;
-  zipCode: string | null;
-  address1: string | null;
-  address2: string | null;
-  userId: number;
+  ceoName: string;
+  email: string;
+  address: string;
+  addressNumber: string;
+  phone: string;
+  fax: string;
   description: string | null;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  orders?: Array<Order>;
 }
 
 interface ColumnType {
@@ -88,19 +69,20 @@ export const header = {
 export const orderApi = "http://localhost:3586/order";
 const CompanyTable = () => {
   const [row, setRow] = useState<any>([]);
-  const [orderRow, setOrderRow] = useState<any>([]);
+  // const [orderRow, setOrderRow] = useState<any>([]);
   const [column, setColumn] = useState<Array<ColumnType>>([]);
-  const [clickRow, setClickRow] = useState({} as Order);
+  const [clickRow, setClickRow] = useState({} as Company);
   const [showModal, setShowModal] = useState(false);
   const [insertShowModal, setInsertShowModal] = useState(false);
 
   //모달열기
   const openModal = (e: any) => {
-    const selectRow = orderRow.filter((data: Order) => {
-      return data.companyId === e.key.id;
-    });
+    // const selectRow = orderRow.filter((data: Order) => {
+    //   return data.companyId === e.key.id;
+    // });
     setShowModal(true);
-    setClickRow(selectRow);
+    setClickRow(e.data);
+
   };
 
   const closeModal = async () => {
@@ -123,10 +105,11 @@ const CompanyTable = () => {
         params: {},
       });
       setRow(result.data);
-      const orderResult = await axios.get<dataResponse>(orderApi, {
-        params: {},
-      });
-      setOrderRow(orderResult.data);
+
+      // const orderResult = await axios.get<dataResponse>(orderApi, {
+      //   params: {},
+      // });
+      // setOrderRow(orderResult.data);
 
       const col: Array<ColumnType> = companyTableColumn;
       setColumn(col);
@@ -164,7 +147,7 @@ const CompanyTable = () => {
         onClose={closeModal}
         onSubmit={() => console.log("Submit")}
         title="거래처 주문 입력"
-        data={clickRow}
+        data={{} as Order}
       ></CompanyInsertModal>
 
       <CompanyInfoModal
