@@ -15,57 +15,34 @@ import OrderInfoModal from "../order/modal/orderInfoModal";
 import { Container } from "react-bootstrap";
 import { companyApi } from "../company/companyTable";
 import OrderInsertModal from "./modal/orderInsertModal";
+import { Export } from "devextreme-react/chart";
 
 export interface Order {
   id?: number;
-  companyId?: number;
-  partnerId?: number;
-  quotationId?: number | null;
-  partnerUserId?: number | null;
-  userId?: number;
-  confirmUserId?: number | null;
-  customerId?: number;
-  partnerCode?: string | null;
-  code?: string;
-  name?: string;
-  orderDate?: string;
-  expectedDate?: string;
-  completeDate?: string | null;
-  confirmDate?: string | null;
-  returnDate?: string | null;
-  rejectReason?: string | null;
-  state?: string;
-  image?: string | null;
-  receiverName?: string;
-  receiverAddress?: string;
-  receiverZipCode?: number;
-  receiverPhoneNumber?: string;
-  description?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-  deletedAt?: string | null;
-  Company?: Company;
+  code: string;
+  name: string;
+  itemName: string; // 품목 및 규격
+  unitPrice: number; // 단가
+  price: number; // 금액
+  vat: number; // 부가세
+  count: number; // 수량
+  resultPrice: number; // 합계금액
+  receivePrice: number; // 수금
+  tax: number; // 잔액
+  description: string; // 비고
+  orderDate: Date; // 일자
+  Company: Company;
 }
 
 export interface Company {
   id: number;
   name: string;
-  code: string;
-  ccIdCompanyType: number;
-  group: any;
-  registrationNumber: string | null;
-  corporationNumber: string | null;
-  ceoName: string | null;
-  businessType: string | null;
-  businessItem: string | null;
-  phone: string | null;
-  fax: string | null;
-  email: string | null;
-  homepage: string | null;
-  zipCode: string | null;
-  address1: string | null;
-  address2: string | null;
-  userId: number;
+  ceoName: string;
+  email: string;
+  address: string;
+  addressNumber: string;
+  phone: string;
+  fax: string;
   description: string | null;
   createdAt: string;
   updatedAt: string;
@@ -152,6 +129,7 @@ const OrderTable = () => {
           emptyPanelText={"여기에 그룹을 넣어주세요"}
         ></GroupPanel>
         <Editing></Editing>
+        <Export enabled={true} fileName={'주문관리'}></Export>
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
       </DataGrid>
 

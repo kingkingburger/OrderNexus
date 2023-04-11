@@ -18,12 +18,12 @@ export const orderTableColumn: Array<ColumnType> = [
     dataType: "date",
     format: "yyyy-MM-dd",
   },
-  {
-    caption: "등록일",
-    dataField: "createdAt",
-    dataType: "date",
-    format: "yyyy-MM-dd",
-  },
+  // {
+  //   caption: "등록일",
+  //   dataField: "createdAt",
+  //   dataType: "date",
+  //   format: "yyyy-MM-dd",
+  // },
   {
     caption: "주문명",
     dataField: "name",
@@ -94,10 +94,10 @@ export const orderTableColumn: Array<ColumnType> = [
     dataField: "company.address",
     dataType: "string",
   },
-  {
-    caption: "주문 접수일",
-    dataField: "orderDate",
-    dataType: "date",
-    format: "yyyy-MM-dd",
-  },
+  // {
+  //   caption: "주문 접수일",
+  //   dataField: "orderDate",
+  //   dataType: "date",
+  //   format: "yyyy-MM-dd",
+  // },
 ];
