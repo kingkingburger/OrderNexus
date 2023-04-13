@@ -13,6 +13,7 @@ export const TypeormConfig: TypeOrmModuleOptions = {
   entities: [Company, Order],
   // autoLoadEntities: true,
   synchronize: true,
-  logging: true,
+  // logging: true,
+  logging: false,
   keepConnectionAlive: true //true 옵션을 설정할 경우 Hot reload 시 DB 연결을 유지해준다.
 };
