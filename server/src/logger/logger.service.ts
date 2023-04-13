@@ -47,7 +47,7 @@ export class LoggerService implements LS {
           format: combine(
             timestamp({ format: "isoDateTime" }),
             printf((info) => {
-              return `${info.message}`;
+              return `${dayjs().format("YYYY-MM-DD-HH-MM")}${info.message}`;
             })
           )
         })
