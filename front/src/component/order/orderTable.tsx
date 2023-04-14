@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  ColumnChooser,
-  DataGrid,
-  Editing,
-  Grouping,
-  GroupPanel,
-} from "devextreme-react/data-grid";
+import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel } from "devextreme-react/data-grid";
 import axios from "axios";
 import { DataType, HorizontalAlignment } from "devextreme/common";
 import { Format } from "devextreme/localization";
-import { orderTableColumn } from "../order/column/orderTableColumn";
+import { orderTableColumn } from "./column/orderTableColumn";
 import { dataResponse } from "../../App";
 import OrderInfoModal from "../order/modal/orderInfoModal";
 import { Container } from "react-bootstrap";
@@ -70,9 +64,8 @@ const OrderTable = () => {
 
   //모달열기
   const openModal = (e: any) => {
-    const selectRow = row.find((data: Order) => data.id === e.key.id);
     setShowModal(true);
-    setClickRow(selectRow);
+    setClickRow(e.data);
   };
 
   const closeModal = async () => {

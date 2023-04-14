@@ -11,19 +11,19 @@ interface ColumnType {
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
 
-export const orderTableColumn: Array<ColumnType> = [
-  {
-    caption: "주문 접수일",
-    dataField: "orderDate",
-    dataType: "date",
-    format: "yyyy-MM-dd",
-  },
+export const orderTableInfoColumn: Array<ColumnType> = [
   // {
   //   caption: "등록일",
   //   dataField: "createdAt",
   //   dataType: "date",
   //   format: "yyyy-MM-dd",
   // },
+  {
+    caption: "주문 접수일",
+    dataField: "orderDate",
+    dataType: "date",
+    format: "yyyy-MM-dd",
+  },
   // {
   //   caption: "주문명",
   //   dataField: "name",
@@ -74,30 +74,5 @@ export const orderTableColumn: Array<ColumnType> = [
     dataField: "description",
     dataType: "number",
   },
-  {
-    caption: "거래처명",
-    dataField: "company.name",
-    dataType: "string",
-  },
-  {
-    caption: "거래처명 전화번호",
-    dataField: "company.phone",
-    dataType: "string",
-  },
-  {
-    caption: "거래처명 우편번호",
-    dataField: "company.addressNumber",
-    dataType: "string",
-  },
-  {
-    caption: "거래처명 주소",
-    dataField: "company.address",
-    dataType: "string",
-  },
-  // {
-  //   caption: "주문 접수일",
-  //   dataField: "orderDate",
-  //   dataType: "date",
-  //   format: "yyyy-MM-dd",
-  // },
+
 ];
