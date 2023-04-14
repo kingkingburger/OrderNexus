@@ -9,6 +9,8 @@ interface ColumnType {
   alignment?: HorizontalAlignment;
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
+  groupIndex?: number;
+  showWhenGrouped?: boolean;
 }
 
 export const orderTableColumn: Array<ColumnType> = [
@@ -17,6 +19,8 @@ export const orderTableColumn: Array<ColumnType> = [
     dataField: "orderDate",
     dataType: "date",
     format: "yyyy-MM-dd",
+    groupIndex: 1,
+    showWhenGrouped: true
   },
   // {
   //   caption: "등록일",
