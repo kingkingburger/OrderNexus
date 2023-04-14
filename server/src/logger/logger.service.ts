@@ -8,13 +8,14 @@ import * as dayjs from "dayjs";
 import { utilities as nestWinstonModuleUtilities } from "nest-winston";
 import { transports } from "winston";
 
-const { errors, combine, timestamp, printf } = winston.format;
+const { errors, combine, timestamp, printf, prettyPrint } = winston.format;
 
 export class LoggerService implements LS {
   private logger: winston.Logger;
 
   constructor(service: string) {
     this.logger = winston.createLogger({
+      format: combine(timestamp(), prettyPrint()),
       transports: [
         new transports.File({
           level: "error",
@@ -46,9 +47,10 @@ export class LoggerService implements LS {
           maxsize: 5000000,
           format: combine(
             timestamp({ format: "isoDateTime" }),
-            printf((info) => {
-              return `${dayjs().format("YYYY-MM-DD-HH-MM")}${info.message}`;
-            })
+            // printf((info) => {
+            //   return `${dayjs().format("YYYY-MM-DD-HH-HH")}${info.message}`;
+            // })
+            prettyPrint()
           )
         })
       ]
