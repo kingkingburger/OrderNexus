@@ -67,7 +67,7 @@ const CompanyInsertModal = ({
     };
 
     await axios.post<insertParamType>(
-      "http://localhost:3586/company",
+      "http://220.90.131.48:3586/company",
       insertParam
     );
     resetStates();

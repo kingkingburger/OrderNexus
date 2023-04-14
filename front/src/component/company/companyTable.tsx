@@ -55,9 +55,9 @@ interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
-export const companyApi = "http://localhost:3586/company";
+export const companyApi = "http://220.90.131.48:3586/company";
 
-export const orderApi = "http://localhost:3586/order";
+export const orderApi = "http://220.90.131.48:3586/order";
 const CompanyTable = () => {
   const [row, setRow] = useState<any>([]);
   // const [orderRow, setOrderRow] = useState<any>([]);

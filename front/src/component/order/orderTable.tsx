@@ -52,7 +52,7 @@ export interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
-export const orderApi = "http://localhost:3586/order";
+export const orderApi = "http://220.90.131.48:3586/order";
 
 const OrderTable = () => {
   const [row, setRow] = useState<any>([]); // 4번)
