@@ -4,6 +4,7 @@ import { UpdateOrderDto } from "./dto/update-order.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Order } from "./entities/order.entity";
 import { Repository } from "typeorm";
+import * as dayjs from "dayjs";
 
 @Injectable()
 export class OrderService {
@@ -13,6 +14,9 @@ export class OrderService {
   ) {}
 
   create(createOrderDto: CreateOrderDto) {
+    if (createOrderDto.orderDate) {
+      createOrderDto.orderDate = new Date(dayjs(createOrderDto.orderDate).format("YYYY-MM-DD"));
+    }
     console.log(createOrderDto);
     return this.orderRepository.save(createOrderDto);
   }

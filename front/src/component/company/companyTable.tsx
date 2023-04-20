@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  ColumnChooser,
-  DataGrid,
-  Editing,
-  Grouping,
-  GroupPanel,
-} from "devextreme-react/data-grid";
+import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel } from "devextreme-react/data-grid";
 import axios from "axios";
 import { DataType, HorizontalAlignment } from "devextreme/common";
 import { Format } from "devextreme/localization";
@@ -61,12 +55,9 @@ interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
-export const companyApi = "http://localhost:3586/company";
-export const header = {
-  "access-token":
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiY29tcGFueUlkIjpudWxsLCJ1c2VyaWQiOiJzeXN0ZW0iLCJuYW1lIjoi7Iuc7Iqk7YWc6rSA66as7J6QIiwiYXV0aCI6InN5c3RlbSIsImlhdCI6MTY3NTg0MDQ4MSwiZXhwIjoxOTkxNDE2NDgxfQ.Dfj9ibLc_mi5tsQ5Oo1cLh9HZ_uHcMf93pc12G4Z8js",
-};
-export const orderApi = "http://localhost:3586/order";
+export const companyApi = "http://220.90.131.48:3586/company";
+
+export const orderApi = "http://220.90.131.48:3586/order";
 const CompanyTable = () => {
   const [row, setRow] = useState<any>([]);
   // const [orderRow, setOrderRow] = useState<any>([]);

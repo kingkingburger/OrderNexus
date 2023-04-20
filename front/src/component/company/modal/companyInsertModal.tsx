@@ -11,6 +11,7 @@ interface MyModalProps {
   title: string;
   data: Order;
 }
+
 interface insertParamType {
   name: string;
   address: string;
@@ -19,38 +20,39 @@ interface insertParamType {
 }
 
 const CompanyInsertModal = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  title,
-  data,
-}: MyModalProps) => {
+                              isOpen,
+                              onClose,
+                              onSubmit,
+                              title,
+                              data
+                            }: MyModalProps) => {
   const [name, setName] = useState("");
   const [ceoName, setCeoName] = useState("");
   const [address, setAddress] = useState("");
-  const [itemName, setItemName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  // const [itemName, setItemName] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [price, setPrice] = useState(0);
   const [addressNumber, setAddressNumber] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [fax, setFax] = useState("");
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+  }, []);
 
   const resetStates = () => {
     setName("");
     setCeoName("");
     setAddress("");
-    setItemName("");
-    setDescription("");
-    setPrice(0);
+    // setItemName("");
+    // setDescription("");
+    // setPrice(0);
     setAddressNumber("");
     setPhone("");
     setEmail("");
     setFax("");
-    setCount(0);
+    // setCount(0);
   };
 
   const insertAction = async () => {
@@ -61,14 +63,13 @@ const CompanyInsertModal = ({
       address: address,
       addressNumber: addressNumber,
       phone: phone,
-      fax: fax,
+      fax: fax
     };
 
-    const result = await axios.post<insertParamType>(
-      "http://localhost:3586/company",
+    await axios.post<insertParamType>(
+      "http://220.90.131.48:3586/company",
       insertParam
     );
-    console.log("result = ", result);
     resetStates();
     onClose();
   };

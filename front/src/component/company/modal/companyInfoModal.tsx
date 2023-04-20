@@ -1,12 +1,6 @@
 import ReactModal from "react-modal";
-import { Company, Order } from "../companyTable";
-import {
-  ColumnChooser,
-  DataGrid,
-  Editing,
-  Grouping,
-  GroupPanel,
-} from "devextreme-react/data-grid";
+import { Company } from "../companyTable";
+import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel } from "devextreme-react/data-grid";
 import React, { useEffect, useState } from "react";
 import { orderTableInfoColumn } from "../../order/column/orderTableInfoColumn";
 import { ColumnType } from "../../order/orderTable";
@@ -37,7 +31,6 @@ const CompanyInfoModal = ({
   const jsonStr2 = JSON.stringify(data, null, 2);
   const infoData = JSON.parse(jsonStr2) as Company;
 
-  console.log('infoData = ' , infoData);
   return (
     <ReactModal
       isOpen={isOpen}

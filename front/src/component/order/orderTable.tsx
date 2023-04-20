@@ -1,71 +1,42 @@
 import React, { useEffect, useState } from "react";
-import {
-  ColumnChooser,
-  DataGrid,
-  Editing,
-  Grouping,
-  GroupPanel,
-} from "devextreme-react/data-grid";
+import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel } from "devextreme-react/data-grid";
 import axios from "axios";
 import { DataType, HorizontalAlignment } from "devextreme/common";
 import { Format } from "devextreme/localization";
-import { orderTableColumn } from "../order/column/orderTableColumn";
+import { orderTableColumn } from "./column/orderTableColumn";
 import { dataResponse } from "../../App";
 import OrderInfoModal from "../order/modal/orderInfoModal";
 import { Container } from "react-bootstrap";
 import { companyApi } from "../company/companyTable";
 import OrderInsertModal from "./modal/orderInsertModal";
+import { Export } from "devextreme-react/chart";
 
 export interface Order {
   id?: number;
-  companyId?: number;
-  partnerId?: number;
-  quotationId?: number | null;
-  partnerUserId?: number | null;
-  userId?: number;
-  confirmUserId?: number | null;
-  customerId?: number;
-  partnerCode?: string | null;
-  code?: string;
-  name?: string;
-  orderDate?: string;
-  expectedDate?: string;
-  completeDate?: string | null;
-  confirmDate?: string | null;
-  returnDate?: string | null;
-  rejectReason?: string | null;
-  state?: string;
-  image?: string | null;
-  receiverName?: string;
-  receiverAddress?: string;
-  receiverZipCode?: number;
-  receiverPhoneNumber?: string;
-  description?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-  deletedAt?: string | null;
-  Company?: Company;
+  code: string;
+  name: string;
+  itemName: string; // 품목 및 규격
+  unitPrice: number; // 단가
+  price: number; // 금액
+  vat: number; // 부가세
+  count: number; // 수량
+  resultPrice: number; // 합계금액
+  receivePrice: number; // 수금
+  tax: number; // 잔액
+  description: string; // 비고
+  orderDate: Date; // 일자
+  Company: Company;
 }
 
 export interface Company {
   id: number;
   name: string;
-  code: string;
-  ccIdCompanyType: number;
-  group: any;
-  registrationNumber: string | null;
-  corporationNumber: string | null;
-  ceoName: string | null;
-  businessType: string | null;
-  businessItem: string | null;
-  phone: string | null;
-  fax: string | null;
-  email: string | null;
-  homepage: string | null;
-  zipCode: string | null;
-  address1: string | null;
-  address2: string | null;
-  userId: number;
+  ceoName: string;
+  email: string;
+  address: string;
+  addressNumber: string;
+  phone: string;
+  fax: string;
   description: string | null;
   createdAt: string;
   updatedAt: string;
@@ -81,7 +52,7 @@ export interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
-export const orderApi = "http://localhost:3586/order";
+export const orderApi = "http://220.90.131.48:3586/order";
 
 const OrderTable = () => {
   const [row, setRow] = useState<any>([]); // 4번)
@@ -93,9 +64,8 @@ const OrderTable = () => {
 
   //모달열기
   const openModal = (e: any) => {
-    const selectRow = row.find((data: Order) => data.id === e.key.id);
     setShowModal(true);
-    setClickRow(selectRow);
+    setClickRow(e.data);
   };
 
   const closeModal = async () => {
@@ -152,6 +122,7 @@ const OrderTable = () => {
           emptyPanelText={"여기에 그룹을 넣어주세요"}
         ></GroupPanel>
         <Editing></Editing>
+        <Export enabled={true} fileName={'주문관리'}></Export>
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
       </DataGrid>
 

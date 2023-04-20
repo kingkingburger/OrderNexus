@@ -4,6 +4,14 @@ import axios from "axios";
 import InputField from "../../util/inputField";
 import { Company } from "../../company/companyTable";
 import Select, { ActionMeta, SingleValue } from "react-select";
+import ReactDatePicker, { registerLocale } from "react-datepicker";
+import 'react-datepicker/dist/react-datepicker.css';
+import ko from 'date-fns/locale/ko';
+import datePick from "../../util/datePick";
+import DatePickerComponent from "../../util/datePick"; // 한국어 locale import
+
+// 한글화된 locale 등록
+registerLocale('ko', ko);
 
 interface MyModalProps {
   isOpen: boolean;
@@ -19,32 +27,47 @@ interface insertParamType {
   phone: string;
   ccIdCompanyType: number;
 }
+
 interface OptionType {
   value: number;
   label: string;
 }
+
 const OrderInsertModal = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  title,
-  data, // 거래처(company)의 정보
-}: MyModalProps) => {
+                            isOpen,
+                            onClose,
+                            onSubmit,
+                            title,
+                            data // 거래처(company)의 정보
+                          }: MyModalProps) => {
   const [name, setName] = useState("");
   const [itemName, setItemName] = useState("");
   const [unitPrice, setUnitPrice] = useState(0);
   const [price, setPrice] = useState(0);
   const [count, setCount] = useState(0);
-  const [vat, setVat] = useState(0);
+  const [vat, setVat] = useState(10);
   const [resultPrice, setResultPrice] = useState(0);
   const [receivePrice, setReceivePrice] = useState(0);
   const [tax, setTax] = useState(0);
   const [description, setDescription] = useState("");
   const [orderDate, setOrderDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date()); // 선택된 날짜의 타입을 Date | null로 지정
+
+  const handleDateChange = (date: Date | null) => { // 선택된 날짜의 타입을 Date | null로 지정
+    setSelectedDate(date);
+  };
 
   // 외래키
   const [company, setCompany] = useState(0);
-  useEffect(() => {}, []);
+  useEffect(() => {
+  }, []);
+
+  useEffect(() => {
+    // resultPrice 계산
+    const calculatedVat = price * (vat / 100)
+    const calculatedResultPrice = (price - calculatedVat) * count;
+    setResultPrice(calculatedResultPrice);
+  },[price, vat, count]);
 
   const resetState = () => {
     setName("");
@@ -69,21 +92,17 @@ const OrderInsertModal = ({
       receivePrice: receivePrice,
       tax: tax,
       description: description,
-      orderDate: new Date(orderDate),
-      company: company,
+      orderDate: selectedDate || new Date(orderDate),
+      company: company
     };
 
     const result = await axios.post<insertParamType>(
-      "http://localhost:3586/order",
+      "http://220.90.131.48:3586/order",
       insertParam
     );
     onClose();
     resetState();
   };
-
-  // const multiSelectChange = (clickedCompany: OptionType) => {
-  //   setCompany(clickedCompany.value);
-  // };
 
   const multiSelectChange = (
     newValue: SingleValue<OptionType>,
@@ -98,7 +117,7 @@ const OrderInsertModal = ({
 
   const options: OptionType[] = data.map(({ id, name }) => ({
     value: id,
-    label: name,
+    label: name
   }));
 
   return (
@@ -120,13 +139,7 @@ const OrderInsertModal = ({
               />
             </Col>
           </Form.Group>
-          {/*<InputField*/}
-          {/*  controlId="formName"*/}
-          {/*  label="주문 명:"*/}
-          {/*  value={name}*/}
-          {/*  placeholder="주문 명"*/}
-          {/*  onChange={(e) => setName(e.target.value)}*/}
-          {/*/>*/}
+
 
           <InputField
             controlId="formItemName"
@@ -144,14 +157,6 @@ const OrderInsertModal = ({
             onChange={(e) => setPrice(Number(e.target.value))}
           />
 
-          {/*<InputField*/}
-          {/*  controlId="formUnitPrice"*/}
-          {/*  label="단가:"*/}
-          {/*  value={unitPrice}*/}
-          {/*  placeholder="단가"*/}
-          {/*  onChange={(e) => setUnitPrice(Number(e.target.value))}*/}
-          {/*/>*/}
-
           <InputField
             controlId="formVat"
             label="부가세:"
@@ -161,35 +166,19 @@ const OrderInsertModal = ({
           />
 
           <InputField
-            controlId="formResultPrice"
-            label="결제금액:"
-            value={resultPrice}
-            placeholder="결제금액"
-            onChange={(e) => setResultPrice(Number(e.target.value))}
-          />
-
-          <InputField
-            controlId="formReceivePrice"
-            label="수금액:"
-            value={receivePrice}
-            placeholder="수금액"
-            onChange={(e) => setReceivePrice(Number(e.target.value))}
-          />
-
-          {/*<InputField*/}
-          {/*  controlId="formTax"*/}
-          {/*  label="과세 대상 금액:"*/}
-          {/*  value={tax}*/}
-          {/*  placeholder="과세 대상 금액"*/}
-          {/*  onChange={(e) => setTax(Number(e.target.value))}*/}
-          {/*/>*/}
-
-          <InputField
             controlId="formCount"
-            label="수량:"
+            label="개수:"
             value={count}
-            placeholder="품목 수량"
+            placeholder="품목 개수"
             onChange={(e) => setCount(Number(e.target.value))}
+          />
+
+          <InputField
+            controlId="formResultPrice"
+            label="합계금액:"
+            value={resultPrice}
+            placeholder="합계금액"
+            onChange={(e) => setResultPrice(Number(e.target.value))}
           />
 
           <InputField
@@ -200,13 +189,56 @@ const OrderInsertModal = ({
             onChange={(e) => setDescription(e.target.value)}
           />
 
-          <InputField
-            controlId="formOrderDate"
-            label="주문 일자:"
-            value={orderDate}
-            placeholder="주문 일자"
-            onChange={(e) => setOrderDate(e.target.value)}
-          />
+          {/*<InputField*/}
+          {/*  controlId="formOrderDate"*/}
+          {/*  label="주문 일자:"*/}
+          {/*  value={orderDate}*/}
+          {/*  placeholder="주문 일자"*/}
+          {/*  onChange={(e) => setOrderDate(e.target.value)}*/}
+          {/*/>*/}
+
+          <Form.Group className="mb-3" as={Row}>
+            <Form.Label column md={3}>
+              주문일자
+            </Form.Label>
+            <Col md={9}>
+                <DatePickerComponent onDateChange={handleDateChange}/>
+            </Col>
+          </Form.Group>
+
+
+          {/*<InputField*/}
+          {/*  controlId="formName"*/}
+          {/*  label="주문 명:"*/}
+          {/*  value={name}*/}
+          {/*  placeholder="주문 명"*/}
+          {/*  onChange={(e) => setName(e.target.value)}*/}
+          {/*/>*/}
+
+          {/*<InputField*/}
+          {/*  controlId="formUnitPrice"*/}
+          {/*  label="단가:"*/}
+          {/*  value={unitPrice}*/}
+          {/*  placeholder="단가"*/}
+          {/*  onChange={(e) => setUnitPrice(Number(e.target.value))}*/}
+          {/*/>*/}
+
+          {/*<InputField*/}
+          {/*  controlId="formReceivePrice"*/}
+          {/*  label="수금액:"*/}
+          {/*  value={receivePrice}*/}
+          {/*  placeholder="수금액"*/}
+          {/*  onChange={(e) => setReceivePrice(Number(e.target.value))}*/}
+          {/*/>*/}
+
+          {/*<InputField*/}
+          {/*  controlId="formTax"*/}
+          {/*  label="과세 대상 금액:"*/}
+          {/*  value={tax}*/}
+          {/*  placeholder="과세 대상 금액"*/}
+          {/*  onChange={(e) => setTax(Number(e.target.value))}*/}
+          {/*/>*/}
+
           {/*<InputField*/}
           {/*  controlId="formCompany"*/}
           {/*  label="회사명:"*/}
