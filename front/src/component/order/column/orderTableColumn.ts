@@ -79,7 +79,7 @@ export const orderTableColumn: Array<ColumnType> = [
     dataType: "number",
   },
   {
-    caption: "거래처명",
+    caption: "거래처",
     dataField: "company.name",
     dataType: "string",
   },
