@@ -67,7 +67,7 @@ const OrderInfoModal = ({
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
       </DataGrid>
 
-      <button onClick={onSubmit}>확인</button>
+      <button onClick={onClose}>확인</button>
       <button onClick={onClose}>취소</button>
     </ReactModal>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel } from "devextreme-react/data-grid";
+import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel, SearchPanel } from "devextreme-react/data-grid";
 import axios from "axios";
 import { DataType, HorizontalAlignment } from "devextreme/common";
 import { Format } from "devextreme/localization";
@@ -68,6 +68,7 @@ const OrderTable = () => {
     setClickRow(e.data);
   };
 
+  // 모달닫기
   const closeModal = async () => {
     setShowModal(false);
     setInsertShowModal(false);
@@ -115,7 +116,10 @@ const OrderTable = () => {
         showRowLines={true}
         onRowClick={openModal}
       >
-        <Grouping></Grouping>
+        <Grouping texts={{
+          groupContinuedMessage: "이전 페이지부터 이어짐",
+          groupContinuesMessage: "다음 페이지에 이어짐"
+        }}></Grouping>
         <GroupPanel
           allowColumnDragging={true}
           visible={true}
@@ -124,6 +128,7 @@ const OrderTable = () => {
         <Editing></Editing>
         <Export enabled={true} fileName={'주문관리'}></Export>
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
+        <SearchPanel  width={"250"} placeholder={"검색"} visible={true}/>
       </DataGrid>
 
       <OrderInsertModal
