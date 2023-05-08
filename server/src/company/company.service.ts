@@ -3,8 +3,9 @@ import { CreateCompanyDto } from "./dto/create-company.dto";
 import { UpdateCompanyDto } from "./dto/update-company.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Order } from "../order/entities/order.entity";
-import { Repository } from "typeorm";
+import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import { Company } from "./entities/company.entity";
+import { SelectCompanyDto } from "./dto/select-company.dto";
 
 @Injectable()
 export class CompanyService {
@@ -17,9 +18,20 @@ export class CompanyService {
     return this.companyRepository.save(createCompanyDto);
   }
 
-  findAll() {
-    return this.companyRepository.find({ relations: ["orders"] });
-    // return this.companyRepository.find();
+  findAll(params: SelectCompanyDto) {
+    const where = {};
+    // 기간 설정
+    if (params.DateFrom && params.DateTo) {
+      where["createdAt"] = Between(params.DateFrom, params.DateTo); // 'between' 검색
+    } else if (params.DateFrom) {
+      where["createdAt"] = MoreThanOrEqual(params.DateFrom); // '>=' 검색
+    } else if (params.DateTo) {
+      where["createdAt"] = LessThanOrEqual(params.DateTo); // '<=' 검색
+    }
+    return this.companyRepository.find({
+      relations: ["orders"],
+      where: { ...where }
+    });
   }
 
   findOne(id: number) {

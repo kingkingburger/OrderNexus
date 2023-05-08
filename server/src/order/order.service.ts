@@ -3,8 +3,9 @@ import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Order } from "./entities/order.entity";
-import { Repository } from "typeorm";
+import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import * as dayjs from "dayjs";
+import { SelectOrderDto } from "./dto/select-order.dto";
 
 @Injectable()
 export class OrderService {
@@ -18,12 +19,24 @@ export class OrderService {
     if (createOrderDto.orderDate) {
       createOrderDto.orderDate = new Date(dayjs(createOrderDto.orderDate).format("YYYY-MM-DD"));
     }
-    console.log(createOrderDto);
     return this.orderRepository.save(createOrderDto);
   }
 
-  findAll() {
-    return this.orderRepository.find({ relations: ["company"] });
+  findAll(selectOrderDto: SelectOrderDto) {
+    const where = {};
+
+    // 기간 설정
+    if (selectOrderDto.orderDateFrom && selectOrderDto.orderDateTo) {
+      where["orderDate"] = Between(selectOrderDto.orderDateFrom, selectOrderDto.orderDateTo); // 'between' 검색
+    } else if (selectOrderDto.orderDateFrom) {
+      where["orderDate"] = MoreThanOrEqual(selectOrderDto.orderDateFrom); // '>=' 검색
+    } else if (selectOrderDto.orderDateTo) {
+      where["orderDate"] = LessThanOrEqual(selectOrderDto.orderDateTo); // '<=' 검색
+    }
+    return this.orderRepository.find({
+      relations: ["company"],
+      where: { ...where }
+    });
   }
 
   findOne(id: number) {
