@@ -1,8 +1,7 @@
-import { Company, Order } from "../companyTable";
-import React, { useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Company } from "../companyTable";
+import React, { useEffect } from "react";
+import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
-import InputField from "../../util/inputField";
 
 interface MyModalProps {
   isOpen: boolean;
