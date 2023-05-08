@@ -40,6 +40,9 @@ export class Order {
   resultPrice: number; // 합계금액
 
   @Column({ nullable: true })
+  resultPriceWithVat: number; // 합계금액(부가세 계산)
+
+  @Column({ nullable: true })
   receivePrice: number; // 수금
 
   @Column({ default: 10, nullable: true })

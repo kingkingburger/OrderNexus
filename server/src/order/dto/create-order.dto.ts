@@ -10,6 +10,7 @@ export class CreateOrderDto {
   vat: number; // 부가세
   count: number; // 수량
   resultPrice: number; // 합계금액
+  resultPriceWithVat: number; // 합계금액(부가세 계산)
   receivePrice: number; // 수금
   tax: number; // 잔액
   description: string; // 비고
