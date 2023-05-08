@@ -125,6 +125,7 @@ const OrderTable = () => {
 
   return (
     <Container>
+
       <Row xs={2} md={4} lg={6}>
         <Col>
           <button onClick={openInsertModal}>주문 입력</button>
@@ -141,7 +142,6 @@ const OrderTable = () => {
           <Button onClick={selectDate}>검색</Button>
         </Col>
       </Row>
-
 
       <DataGrid
         dataSource={row}

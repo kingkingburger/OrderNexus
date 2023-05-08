@@ -1,5 +1,5 @@
 import ReactModal from "react-modal";
-import { Company } from "../companyTable";
+import { Company, Order } from "../companyTable";
 import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel } from "devextreme-react/data-grid";
 import React, { useEffect, useState } from "react";
 import { orderTableInfoColumn } from "../../order/column/orderTableInfoColumn";
@@ -7,8 +7,10 @@ import { ColumnType } from "../../order/orderTable";
 import CompanyUpdateModal from "./companyUpdateModal";
 import CompanyDeleteModal from "./companyDeleteModal";
 import { Export } from "devextreme-react/chart";
-import styles from "../css/company.module.css"
 import { Button, Col, Row } from "react-bootstrap";
+import { getMonthStartEndDateTime } from "../../util/lib/dateRelated";
+import DatePickerComponent from "../../util/datePick";
+
 interface MyModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -29,12 +31,21 @@ const CompanyInfoModal = ({
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [clickRow, setClickRow] = useState({} as Company);
   const [total, setTotal] = useState(0);
+  console.log('data.orders = ' , data.orders);
+  const [duplicateInfo, setDuplicateInfo] = useState<Order[]>(data.orders || []);
+
+  // 기간설정 state
+  const {monthStart, monthEnd} = getMonthStartEndDateTime()
+  const [orderDateFrom, setOrderDateFrom] = useState(monthStart || "");
+  const [orderDateTo, setOrderDateTo] = useState(monthEnd || "");
+
+  // infoData 넘어온거 깊은복사 과정
+  const jsonStr2 = JSON.stringify(data, null, 2);
+  const infoData = JSON.parse(jsonStr2) as Company;
 
   // update 모달열기
   const openUpdateModal = (e: any) => {
     // 클릭된 데이터 담아두기
-    const jsonStr2 = JSON.stringify(data, null, 2);
-    const infoData = JSON.parse(jsonStr2) as Company;
     setClickRow(infoData);
     setShowUpdateModal(true);
   };
@@ -42,8 +53,6 @@ const CompanyInfoModal = ({
   // delete 모달열기
   const openDeleteModal = (e: any) => {
     // 클릭된 데이터 담아두기
-    const jsonStr2 = JSON.stringify(data, null, 2);
-    const infoData = JSON.parse(jsonStr2) as Company;
     setClickRow(infoData);
     setShowDeleteModal(true);
   };
@@ -52,6 +61,9 @@ const CompanyInfoModal = ({
   const closeModal = () => {
     setShowUpdateModal(false);
     setShowDeleteModal(false);
+    // 모달이 닫히면 기간 1달로 초기화
+    setOrderDateFrom(monthStart);
+    setOrderDateTo(monthEnd);
     setClickRow({} as Company);
   };
 
@@ -63,16 +75,11 @@ const CompanyInfoModal = ({
     }
   };
 
+  // col 설정
   useEffect(() => {
     const col: Array<ColumnType> = orderTableInfoColumn;
     setColumn(col);
   }, []);
-
-
-  // infoData 넘어온거 깊은복사 과정
-  const jsonStr2 = JSON.stringify(data, null, 2);
-  const infoData = JSON.parse(jsonStr2) as Company;
-
 
   // 총합을 구하기 위함
   useEffect(() => {
@@ -84,7 +91,31 @@ const CompanyInfoModal = ({
     }
   }, [data]);
 
+  const handleDateFrom = (date: Date | null) => { // 선택된 날짜의 타입을 Date | null로 지정
+    setOrderDateFrom(date?.toISOString() || "");
+  };
+  const handleDateTo = (date: Date | null) => { // 선택된 날짜의 타입을 Date | null로 지정
+    setOrderDateTo(date?.toISOString() || "");
+  };
 
+  // 필터링된 row만 보여주기 위함
+  const selectDate = () =>{
+    if(data.orders){
+      const filteredDate = data.orders.filter((order) =>{
+        const orderDate = new Date(order.orderDate);
+        const from = new Date(orderDateFrom)
+        const to = new Date(orderDateTo)
+        if (orderDateFrom && orderDateTo) {
+          // orderDateFrom과 orderDateTo가 모두 있는 경우
+          return orderDate >= from && orderDate <= to;
+        } else {
+          return false; // 필터 조건이 없으면 false 반환해서 해당 주문은 제외
+        }
+      })
+      setDuplicateInfo(filteredDate);
+    }
+  }
+  
   return (
     <ReactModal
       isOpen={isOpen}
@@ -106,8 +137,25 @@ const CompanyInfoModal = ({
       <button onClick={openUpdateModal}>수정</button>
       <button onClick={openDeleteModal}>삭제</button>
 
+      <Row xs={2} md={4} lg={6}>
+        <Col>
+          <div>시작일</div>
+          <DatePickerComponent  onDateChange={handleDateFrom} dateParams={new Date(orderDateFrom)}/>
+        </Col>
+        <Col>
+          <div>종료일</div>
+          <DatePickerComponent  onDateChange={handleDateTo} dateParams={new Date(orderDateTo)}/>
+        </Col>
+        <Col>
+          <Button onClick={selectDate}>검색</Button>
+        </Col>
+      </Row>
+
+      {/*dataSource={infoData.orders}*/}
+      {/*dataSource={duplicateInfo}*/}
+
       <DataGrid
-        dataSource={infoData.orders}
+        dataSource={duplicateInfo}
         columns={column}
         allowColumnResizing={true}
         allowColumnReordering={true}
