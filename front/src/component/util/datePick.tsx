@@ -7,10 +7,11 @@ registerLocale('ko', ko);
 
 interface DatePickerComponentProps {
   onDateChange: (date: Date | null) => void;
+  dateParams: Date;
 }
 
-const DatePickerComponent: React.FC<DatePickerComponentProps> = ({ onDateChange }) => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+const DatePickerComponent: React.FC<DatePickerComponentProps> = ({ onDateChange, dateParams }) => {
+  const [selectedDate, setSelectedDate] = useState<Date | null>(dateParams || new Date());
 
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);

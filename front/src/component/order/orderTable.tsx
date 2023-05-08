@@ -6,10 +6,13 @@ import { Format } from "devextreme/localization";
 import { orderTableColumn } from "./column/orderTableColumn";
 import { dataResponse } from "../../App";
 import OrderInfoModal from "../order/modal/orderInfoModal";
-import { Container } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { companyApi } from "../company/companyTable";
 import OrderInsertModal from "./modal/orderInsertModal";
 import { Export } from "devextreme-react/chart";
+import DatePickerComponent from "../util/datePick";
+import { getMonthStartEndDateTime } from "../util/lib/dateRelated";
+
 // import * as https from "https";
 
 export interface Order {
@@ -64,6 +67,11 @@ const OrderTable = () => {
   const [showModal, setShowModal] = useState(false);
   const [insertShowModal, setInsertShowModal] = useState(false);
 
+  // 기간설정 state
+  const {monthStart, monthEnd} = getMonthStartEndDateTime()
+  const [orderDateFrom, setOrderDateFrom] = useState(monthStart || "");
+  const [orderDateTo, setOrderDateTo] = useState(monthEnd || "");
+
   //모달열기
   const openModal = (e: any) => {
     setShowModal(true);
@@ -74,9 +82,7 @@ const OrderTable = () => {
   const closeModal = async () => {
     setShowModal(false);
     setInsertShowModal(false);
-    const result = await axios.get<dataResponse>(orderApi, {
-      // httpsAgent: new https.Agent({ rejectUnauthorized: false})
-    });
+    const result = await axios.get<dataResponse>(orderApi, {});
     setRow(result.data);
   };
 
@@ -87,7 +93,7 @@ const OrderTable = () => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get<dataResponse>(orderApi, {
-        params: {},
+        params: {orderDateFrom: orderDateFrom, orderDateTo : orderDateTo}
       });
 
       setRow(result.data);
@@ -103,10 +109,40 @@ const OrderTable = () => {
 
     fetchData();
   }, []);
+  const handleDateFrom = (date: Date | null) => { // 선택된 날짜의 타입을 Date | null로 지정
+    setOrderDateFrom(date?.toISOString() || "");
+  };
+  const handleDateTo = (date: Date | null) => { // 선택된 날짜의 타입을 Date | null로 지정
+    setOrderDateTo(date?.toISOString() || "");
+  };
+
+  const selectDate = async () =>{
+    const result = await axios.get<dataResponse>(orderApi, {
+      params: {orderDateFrom: orderDateFrom, orderDateTo : orderDateTo}
+    });
+    setRow(result.data);
+  }
 
   return (
     <Container>
-      <button onClick={openInsertModal}>주문 입력</button>
+      <Row xs={2} md={4} lg={6}>
+        <Col>
+          <button onClick={openInsertModal}>주문 입력</button>
+        </Col>
+        <Col>
+          <div>시작일</div>
+          <DatePickerComponent  onDateChange={handleDateFrom} dateParams={new Date(orderDateFrom)}/>
+        </Col>
+        <Col>
+          <div>종료일</div>
+          <DatePickerComponent  onDateChange={handleDateTo} dateParams={new Date(orderDateTo)}/>
+        </Col>
+        <Col>
+          <Button onClick={selectDate}>검색</Button>
+        </Col>
+      </Row>
+
+
       <DataGrid
         dataSource={row}
         columns={column}

@@ -185,7 +185,7 @@ const OrderInsertModal = ({
               주문일자
             </Form.Label>
             <Col md={9}>
-                <DatePickerComponent onDateChange={handleDateChange}/>
+                <DatePickerComponent onDateChange={handleDateChange} dateParams={new Date()}/>
             </Col>
           </Form.Group>
 
