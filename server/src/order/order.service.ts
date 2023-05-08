@@ -14,6 +14,7 @@ export class OrderService {
   ) {}
 
   create(createOrderDto: CreateOrderDto) {
+    // 9시 표준시각으로 접수일을 맞추기 위해
     if (createOrderDto.orderDate) {
       createOrderDto.orderDate = new Date(dayjs(createOrderDto.orderDate).format("YYYY-MM-DD"));
     }
@@ -30,6 +31,10 @@ export class OrderService {
   }
 
   update(id: number, updateOrderDto: UpdateOrderDto) {
+    // 9시 표준시각으로 접수일을 맞추기 위해
+    if (updateOrderDto.orderDate) {
+      updateOrderDto.orderDate = new Date(dayjs(updateOrderDto.orderDate).format("YYYY-MM-DD"));
+    }
     return this.orderRepository.update(id, updateOrderDto);
   }
 
