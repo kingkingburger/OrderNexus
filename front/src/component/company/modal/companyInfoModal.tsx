@@ -7,7 +7,8 @@ import { ColumnType } from "../../order/orderTable";
 import CompanyUpdateModal from "./companyUpdateModal";
 import CompanyDeleteModal from "./companyDeleteModal";
 import { Export } from "devextreme-react/chart";
-
+import styles from "../css/company.module.css"
+import { Button, Col, Row } from "react-bootstrap";
 interface MyModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -73,6 +74,7 @@ const CompanyInfoModal = ({
   const infoData = JSON.parse(jsonStr2) as Company;
 
 
+  // 총합을 구하기 위함
   useEffect(() => {
     if (infoData.orders) {
       const sum = infoData.orders.reduce((acc, cur) => {
@@ -81,6 +83,7 @@ const CompanyInfoModal = ({
       setTotal(sum);
     }
   }, [data]);
+
 
   return (
     <ReactModal
@@ -103,7 +106,6 @@ const CompanyInfoModal = ({
       <button onClick={openUpdateModal}>수정</button>
       <button onClick={openDeleteModal}>삭제</button>
 
-
       <DataGrid
         dataSource={infoData.orders}
         columns={column}
@@ -125,7 +127,9 @@ const CompanyInfoModal = ({
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
       </DataGrid>
 
-      <div> 총합 : {total}</div>
+      <Button variant="warning" size="lg" disabled >총합 : {total}</Button>
+
+      {/*<div className={styles.totalCount}> 총합 : {total}</div>*/}
       <button onClick={onSubmit}>확인</button>
       <button onClick={onClose}>취소</button>
 
