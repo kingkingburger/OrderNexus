@@ -13,7 +13,7 @@ interface MyModalProps {
   handleUpdateChange: (newValue: boolean) => void;
 }
 
-interface updateParamType {
+interface deleteParamType {
   name: string;
   phone: string;
   ceoName: string;
@@ -30,13 +30,6 @@ const CompanyDeleteModal = ({
                               data,
                               handleUpdateChange
                             }: MyModalProps) => {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [ceoName, setCeoName] = useState("");
-  const [address, setAddress] = useState("");
-  const [addressNumber, setAddressNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [fax, setFax] = useState("");
 
   useEffect(() => {
     // [componentWillUnmount] 모달창이 종료되었을 때 isOpen을 false로 만들기 위함
@@ -45,38 +38,14 @@ const CompanyDeleteModal = ({
     };
   }, []);
 
-  useEffect(() => {
-    setName(data.name || "");
-    setCeoName(data.ceoName || "");
-    setAddress(data.address || "");
-    setAddressNumber(data.addressNumber || "");
-    setPhone(data.phone || "");
-    setEmail(data.email || "");
-    setFax(data.fax || "");
-  }, [data]);
-
-
-  const resetStates = () => {
-    setName("");
-    setCeoName("");
-    setAddress("");
-    setAddressNumber("");
-    setPhone("");
-    setEmail("");
-    setFax("");
-  };
-
   const deleteAction = async () => {
     const deletedId = data.id;
-    await axios.delete<updateParamType>(
+    await axios.delete<deleteParamType>(
       `http://localhost:3586/company/${deletedId}`
     );
 
     // 부모 컴포넌트에게 delete되었다고 알리기 위함
     handleUpdateChange(true);
-
-    // 다음에 상태창을 열 때 값이 초기화 되도록
-    resetStates();
 
     // 업데이트 되면 창 닫기
     onClose();
