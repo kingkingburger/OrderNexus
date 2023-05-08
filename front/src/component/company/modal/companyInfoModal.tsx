@@ -6,6 +6,7 @@ import { orderTableInfoColumn } from "../../order/column/orderTableInfoColumn";
 import { ColumnType } from "../../order/orderTable";
 import CompanyUpdateModal from "./companyUpdateModal";
 import CompanyDeleteModal from "./companyDeleteModal";
+import { Export } from "devextreme-react/chart";
 
 interface MyModalProps {
   isOpen: boolean;
@@ -26,6 +27,7 @@ const CompanyInfoModal = ({
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [clickRow, setClickRow] = useState({} as Company);
+  const [total, setTotal] = useState(0);
 
   // update 모달열기
   const openUpdateModal = (e: any) => {
@@ -45,7 +47,6 @@ const CompanyInfoModal = ({
     setShowDeleteModal(true);
   };
 
-
   // 전체 모달 닫기
   const closeModal = () => {
     setShowUpdateModal(false);
@@ -56,7 +57,7 @@ const CompanyInfoModal = ({
   // update,delete되었는지 확인하기 위함
   const handleUpdateChange = (newValue: boolean) => {
     // update,delete가 되었다면 모달 닫기
-    if(newValue){
+    if (newValue) {
       onClose();
     }
   };
@@ -67,8 +68,20 @@ const CompanyInfoModal = ({
   }, []);
 
 
+  // infoData 넘어온거 깊은복사 과정
   const jsonStr2 = JSON.stringify(data, null, 2);
   const infoData = JSON.parse(jsonStr2) as Company;
+
+
+  useEffect(() => {
+
+    if (infoData.orders) {
+      const sum = infoData.orders.reduce((acc, cur) => {
+        return acc + Number(cur.resultPrice);
+      }, 0);
+      setTotal(sum);
+    }
+  }, [data]);
 
   return (
     <ReactModal
@@ -91,7 +104,7 @@ const CompanyInfoModal = ({
       <button onClick={openUpdateModal}>수정</button>
       <button onClick={openDeleteModal}>삭제</button>
 
-      
+
       <DataGrid
         dataSource={infoData.orders}
         columns={column}
@@ -109,9 +122,11 @@ const CompanyInfoModal = ({
           emptyPanelText={"여기에 그룹을 넣어주세요"}
         ></GroupPanel>
         <Editing></Editing>
+        <Export enabled={true} fileName={`${infoData.name}`}></Export>
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
       </DataGrid>
 
+      <div> 총합 : {total}</div>
       <button onClick={onSubmit}>확인</button>
       <button onClick={onClose}>취소</button>
 
