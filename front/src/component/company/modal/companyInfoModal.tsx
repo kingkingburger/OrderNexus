@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { orderTableInfoColumn } from "../../order/column/orderTableInfoColumn";
 import { ColumnType } from "../../order/orderTable";
 import CompanyUpdateModal from "./companyUpdateModal";
+import CompanyDeleteModal from "./companyDeleteModal";
 
 interface MyModalProps {
   isOpen: boolean;
@@ -22,26 +23,39 @@ const CompanyInfoModal = ({
                             data
                           }: MyModalProps) => {
   const [column, setColumn] = useState<Array<ColumnType>>([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [clickRow, setClickRow] = useState({} as Company);
+
   // update 모달열기
-  const openModal = (e: any) => {
+  const openUpdateModal = (e: any) => {
     // 클릭된 데이터 담아두기
     const jsonStr2 = JSON.stringify(data, null, 2);
     const infoData = JSON.parse(jsonStr2) as Company;
     setClickRow(infoData);
-    setShowModal(true);
+    setShowUpdateModal(true);
   };
+
+  // delete 모달열기
+  const openDeleteModal = (e: any) => {
+    // 클릭된 데이터 담아두기
+    const jsonStr2 = JSON.stringify(data, null, 2);
+    const infoData = JSON.parse(jsonStr2) as Company;
+    setClickRow(infoData);
+    setShowDeleteModal(true);
+  };
+
 
   // 전체 모달 닫기
   const closeModal = () => {
-    setShowModal(false);
+    setShowUpdateModal(false);
+    setShowDeleteModal(false);
     setClickRow({} as Company);
   };
 
-  // update되었는지 확인하기 위함
+  // update,delete되었는지 확인하기 위함
   const handleUpdateChange = (newValue: boolean) => {
-    // update가 되었다면 모달 닫기
+    // update,delete가 되었다면 모달 닫기
     if(newValue){
       onClose();
     }
@@ -74,8 +88,10 @@ const CompanyInfoModal = ({
       <div>주소: {infoData.address}</div>
       <div>우편번호: {infoData.addressNumber}</div>
 
-      <button onClick={openModal}>수정</button>
+      <button onClick={openUpdateModal}>수정</button>
+      <button onClick={openDeleteModal}>삭제</button>
 
+      
       <DataGrid
         dataSource={infoData.orders}
         columns={column}
@@ -100,7 +116,16 @@ const CompanyInfoModal = ({
       <button onClick={onClose}>취소</button>
 
       <CompanyUpdateModal
-        isOpen={showModal}
+        isOpen={showUpdateModal}
+        onClose={closeModal}
+        onSubmit={() => console.log("Submit")}
+        title="거래처 주문 상세정보"
+        data={clickRow}
+        handleUpdateChange={handleUpdateChange}
+      />
+
+      <CompanyDeleteModal
+        isOpen={showDeleteModal}
         onClose={closeModal}
         onSubmit={() => console.log("Submit")}
         title="거래처 주문 상세정보"
