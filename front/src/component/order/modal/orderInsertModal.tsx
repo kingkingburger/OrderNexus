@@ -66,7 +66,7 @@ const OrderInsertModal = ({
     // resultPrice 계산
     const calculatedVat = price * (vat / 100)
     const calculatedResultPrice = (price - calculatedVat) * count;
-    setResultPrice(calculatedResultPrice);
+    setResultPrice(price * count);
   },[price, vat, count]);
 
   const resetState = () => {
@@ -97,7 +97,7 @@ const OrderInsertModal = ({
     };
 
     const result = await axios.post<insertParamType>(
-      "http://220.90.131.48:3586/order",
+      "http://localhost:3586/order",
       insertParam
     );
     onClose();
@@ -157,13 +157,13 @@ const OrderInsertModal = ({
             onChange={(e) => setPrice(Number(e.target.value))}
           />
 
-          <InputField
-            controlId="formVat"
-            label="부가세:"
-            value={vat}
-            placeholder="부가세"
-            onChange={(e) => setVat(Number(e.target.value))}
-          />
+          {/*<InputField*/}
+          {/*  controlId="formVat"*/}
+          {/*  label="부가세:"*/}
+          {/*  value={vat}*/}
+          {/*  placeholder="부가세"*/}
+          {/*  onChange={(e) => setVat(Number(e.target.value))}*/}
+          {/*/>*/}
 
           <InputField
             controlId="formCount"

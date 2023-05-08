@@ -19,6 +19,11 @@ interface ColumnType {
 
 export const orderTableColumn: Array<ColumnType> = [
   {
+    caption: "거래처",
+    dataField: "company.name",
+    dataType: "string"
+  },
+  {
     caption: "주문 접수일",
     dataField: "orderDate",
     dataType: "date",
@@ -51,9 +56,9 @@ export const orderTableColumn: Array<ColumnType> = [
     caption: "가격",
     dataField: "price",
     dataType: "number",
-    calculateCellValue: (row) => {
-      return cellCalculate(row, "원");
-    }
+    // calculateCellValue: (row) => {
+    //   return cellCalculate(row, "원");
+    // }
   },
   {
     caption: "부가세",
@@ -64,9 +69,9 @@ export const orderTableColumn: Array<ColumnType> = [
     caption: "수량",
     dataField: "count",
     dataType: "number",
-    calculateCellValue: (row) => {
-      return cellCalculate(row, "개");
-    }
+    // calculateCellValue: (row) => {
+    //   return cellCalculate(row, "개");
+    // }
   },
   // {
   //   caption: "수금",
@@ -82,20 +87,16 @@ export const orderTableColumn: Array<ColumnType> = [
     caption: "합계금액",
     dataField: "resultPrice",
     dataType: "number",
-    calculateCellValue: (row) => {
-      return cellCalculate(row, "원");
-    }
+    // calculateCellValue: (row) => {
+    //   return cellCalculate(row, "원");
+    // }
   },
   {
     caption: "비고",
     dataField: "description",
     dataType: "number"
   },
-  {
-    caption: "거래처",
-    dataField: "company.name",
-    dataType: "string"
-  },
+
   {
     caption: "거래처 전화번호",
     dataField: "company.phone",

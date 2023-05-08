@@ -19,6 +19,7 @@
     "bootstrap": "^5.2.3",
     "devextreme": "^22.2.4",
     "devextreme-react": "^22.2.4",
+    "https-browserify": "^1.0.0",
     "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",

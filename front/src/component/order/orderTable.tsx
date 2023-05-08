@@ -10,6 +10,7 @@ import { Container } from "react-bootstrap";
 import { companyApi } from "../company/companyTable";
 import OrderInsertModal from "./modal/orderInsertModal";
 import { Export } from "devextreme-react/chart";
+// import * as https from "https";
 
 export interface Order {
   id?: number;
@@ -52,7 +53,8 @@ export interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
-export const orderApi = "http://220.90.131.48:3586/order";
+
+export const orderApi = "http://localhost:3586/order";
 
 const OrderTable = () => {
   const [row, setRow] = useState<any>([]); // 4번)
@@ -73,7 +75,7 @@ const OrderTable = () => {
     setShowModal(false);
     setInsertShowModal(false);
     const result = await axios.get<dataResponse>(orderApi, {
-      params: {},
+      // httpsAgent: new https.Agent({ rejectUnauthorized: false})
     });
     setRow(result.data);
   };
@@ -83,9 +85,13 @@ const OrderTable = () => {
   };
 
   useEffect(() => {
+    // const agent = new https.Agent({
+    //   rejectUnauthorized: false
+    // });
     const fetchData = async () => {
       const result = await axios.get<dataResponse>(orderApi, {
         params: {},
+        // httpsAgent: agent
       });
 
       setRow(result.data);
@@ -94,7 +100,7 @@ const OrderTable = () => {
 
       // 거래처 정보를 가지고옴
       const companyResult = await axios.get<dataResponse>(companyApi, {
-        params: {},
+        params: {}
       });
       setCompanyData(companyResult.data);
     };
@@ -126,9 +132,9 @@ const OrderTable = () => {
           emptyPanelText={"여기에 그룹을 넣어주세요"}
         ></GroupPanel>
         <Editing></Editing>
-        <Export enabled={true} fileName={'주문관리'}></Export>
+        <Export enabled={true} fileName={"주문관리"}></Export>
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
-        <SearchPanel  width={"250"} placeholder={"검색"} visible={true}/>
+        <SearchPanel width={"250"} placeholder={"검색"} visible={true} />
       </DataGrid>
 
       <OrderInsertModal

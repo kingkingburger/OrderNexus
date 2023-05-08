@@ -55,27 +55,27 @@ interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
-export const companyApi = "http://220.90.131.48:3586/company";
+export const companyApi = "http://localhost:3586/company";
 
-export const orderApi = "http://220.90.131.48:3586/order";
 const CompanyTable = () => {
   const [row, setRow] = useState<any>([]);
-  // const [orderRow, setOrderRow] = useState<any>([]);
   const [column, setColumn] = useState<Array<ColumnType>>([]);
   const [clickRow, setClickRow] = useState({} as Company);
   const [showModal, setShowModal] = useState(false);
   const [insertShowModal, setInsertShowModal] = useState(false);
 
-  //모달열기
+  // info 모달열기
   const openModal = (e: any) => {
-    // const selectRow = orderRow.filter((data: Order) => {
-    //   return data.companyId === e.key.id;
-    // });
     setShowModal(true);
     setClickRow(e.data);
-
   };
 
+  // insert 모달 열기
+  const openInsertModal = (e: any) => {
+    setInsertShowModal(true);
+  };
+
+  // 전체 모달 닫기
   const closeModal = async () => {
     setShowModal(false);
     setInsertShowModal(false);
@@ -86,21 +86,12 @@ const CompanyTable = () => {
     setRow(result.data);
   };
 
-  const openInsertModal = (e: any) => {
-    setInsertShowModal(true);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get<dataResponse>(companyApi, {
         params: {},
       });
       setRow(result.data);
-
-      // const orderResult = await axios.get<dataResponse>(orderApi, {
-      //   params: {},
-      // });
-      // setOrderRow(orderResult.data);
 
       const col: Array<ColumnType> = companyTableColumn;
       setColumn(col);

@@ -1,4 +1,4 @@
-import { Order } from "../companyTable";
+import { Company, Order } from "../companyTable";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
@@ -9,54 +9,67 @@ interface MyModalProps {
   onClose: () => void;
   onSubmit: () => void;
   title: string;
-  data: Order;
+  data: Company;
+  handleUpdateChange: (newValue: boolean) => void;
 }
 
-interface insertParamType {
+interface updateParamType {
   name: string;
-  address: string;
   phone: string;
-  ccIdCompanyType: number;
+  ceoName: string;
+  address: string;
+  email: string;
+  fax: string;
 }
 
-const CompanyInsertModal = ({
+const CompanyUpdateModal = ({
                               isOpen,
                               onClose,
                               onSubmit,
                               title,
-                              data
+                              data,
+                              handleUpdateChange
                             }: MyModalProps) => {
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [ceoName, setCeoName] = useState("");
   const [address, setAddress] = useState("");
-  // const [itemName, setItemName] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [price, setPrice] = useState(0);
   const [addressNumber, setAddressNumber] = useState("");
-  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [fax, setFax] = useState("");
-  // const [count, setCount] = useState(0);
 
   useEffect(() => {
+    // [componentWillUnmount] 모달창이 종료되었을 때 isOpen을 false로 만들기 위함
+    return () => {
+      onClose();
+    };
   }, []);
+
+  useEffect(() => {
+    setName(data.name || "");
+    setCeoName(data.ceoName || "");
+    setAddress(data.address || "");
+    setAddressNumber(data.addressNumber || "");
+    setPhone(data.phone || "");
+    setEmail(data.email || "");
+    setFax(data.fax || "");
+  }, [data]);
+
+
 
   const resetStates = () => {
     setName("");
     setCeoName("");
     setAddress("");
-    // setItemName("");
-    // setDescription("");
-    // setPrice(0);
     setAddressNumber("");
     setPhone("");
     setEmail("");
     setFax("");
-    // setCount(0);
   };
 
-  const insertAction = async () => {
-    const insertParam = {
+  const updateAction = async () => {
+    const updatedId = data.id;
+    const updateParam = {
       name: name,
       ceoName: ceoName,
       email: email,
@@ -66,18 +79,24 @@ const CompanyInsertModal = ({
       fax: fax
     };
 
-    await axios.post<insertParamType>(
-      "http://localhost:3586/company",
-      insertParam
+    await axios.put<updateParamType>(
+      `http://localhost:3586/company/${updatedId}`,
+      updateParam
     );
+    // 부모 컴포넌트에게 update되었다고 알리기 위함
+    handleUpdateChange(true);
+
+    // 다음에 상태창을 열 때 값이 초기화 되도록 
     resetStates();
+
+    // 업데이트 되면 창 닫기
     onClose();
   };
 
   return (
     <Modal show={isOpen} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>거래처 입력</Modal.Title>
+        <Modal.Title>거래처 수정</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -138,9 +157,10 @@ const CompanyInsertModal = ({
           />
         </Form>
       </Modal.Body>
+
       <Modal.Footer>
-        <Button variant="primary" onClick={insertAction}>
-          등록
+        <Button variant="primary" onClick={updateAction}>
+          수정
         </Button>
         <Button variant="secondary" onClick={onClose}>
           닫기
@@ -150,4 +170,4 @@ const CompanyInsertModal = ({
   );
 };
 
-export default CompanyInsertModal;
+export default CompanyUpdateModal;

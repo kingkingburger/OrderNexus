@@ -12,19 +12,6 @@ interface ColumnType {
 }
 
 export const companyTableColumn: Array<ColumnType> = [
-  // {
-  //   caption: "순번", // 순번
-  //   name: "index",
-  //   dataType: "number",
-  //   alignment: "center",
-  //   cellTemplate: function (container, options) {
-  //     container.innerText = options.rowIndex + 1;
-  //   },
-  // },
-  // {
-  //   caption: "사업장코드",
-  //   dataField: "code",
-  // },
   {
     caption: "사업장이름",
     dataField: "name",
