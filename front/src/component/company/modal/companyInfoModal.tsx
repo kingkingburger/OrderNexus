@@ -74,7 +74,6 @@ const CompanyInfoModal = ({
 
 
   useEffect(() => {
-
     if (infoData.orders) {
       const sum = infoData.orders.reduce((acc, cur) => {
         return acc + Number(cur.resultPrice);

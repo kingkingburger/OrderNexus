@@ -1,7 +1,6 @@
 import { DataType, HorizontalAlignment } from "devextreme/common";
 import { Format } from "devextreme/localization";
 import { Order } from "../orderTable";
-import { cellCalculate } from "../../util/lib/cellCalculate";
 
 interface ColumnType {
   caption?: string;
@@ -12,6 +11,8 @@ interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
   groupIndex?: number;
+  sortIndex?: number;
+  sortOrder?: string;
   showWhenGrouped?: boolean;
   calculateCellValue?: (row: Order) => string | number;
 }
@@ -29,6 +30,8 @@ export const orderTableColumn: Array<ColumnType> = [
     dataType: "date",
     format: "yyyy-MM-dd",
     groupIndex: 1,
+    sortIndex: 0,
+    sortOrder: 'desc',
     showWhenGrouped: false
   },
   // {
@@ -92,12 +95,6 @@ export const orderTableColumn: Array<ColumnType> = [
     // }
   },
   {
-    caption: "비고",
-    dataField: "description",
-    dataType: "number"
-  },
-
-  {
     caption: "거래처 전화번호",
     dataField: "company.phone",
     dataType: "string"
@@ -111,7 +108,12 @@ export const orderTableColumn: Array<ColumnType> = [
     caption: "거래처 주소",
     dataField: "company.address",
     dataType: "string"
-  }
+  },
+  {
+    caption: "비고",
+    dataField: "description",
+    dataType: "number"
+  },
   // {
   //   caption: "주문 접수일",
   //   dataField: "orderDate",

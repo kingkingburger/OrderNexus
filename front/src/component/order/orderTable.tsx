@@ -25,7 +25,7 @@ export interface Order {
   receivePrice: number; // 수금
   tax: number; // 잔액
   description: string; // 비고
-  orderDate: Date; // 일자
+  orderDate: ""; // 일자
   Company: Company;
 }
 
@@ -85,13 +85,9 @@ const OrderTable = () => {
   };
 
   useEffect(() => {
-    // const agent = new https.Agent({
-    //   rejectUnauthorized: false
-    // });
     const fetchData = async () => {
       const result = await axios.get<dataResponse>(orderApi, {
         params: {},
-        // httpsAgent: agent
       });
 
       setRow(result.data);
@@ -105,7 +101,7 @@ const OrderTable = () => {
       setCompanyData(companyResult.data);
     };
 
-    fetchData(); // 6번) 반드시 함수를 호출해야만 async함수가 실행되는 것 잊지말기!
+    fetchData();
   }, []);
 
   return (
