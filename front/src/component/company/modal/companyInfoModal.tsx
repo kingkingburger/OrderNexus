@@ -97,7 +97,7 @@ const CompanyInfoModal = ({
   // 총합을 구하기 위함
   useEffect(() => {
     if (infoData.orders) {
-      const sum = duplicateInfo.reduce((acc, cur) => {
+      const sum = duplicateInfo?.reduce((acc, cur) => {
         return acc + Number(cur.resultPrice);
       }, 0);
       setTotal(sum);
