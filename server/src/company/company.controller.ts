@@ -18,8 +18,8 @@ export class CompanyController {
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.companyService.findOne(+id);
+  findOne(@Param("id") id: string, @Query() params: { DateFrom: string; DateTo: string }) {
+    return this.companyService.findOne(+id, params);
   }
 
   @Put(":id")
