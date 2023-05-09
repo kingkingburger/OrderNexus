@@ -8,7 +8,8 @@ import ReactDatePicker, { registerLocale } from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css';
 import ko from 'date-fns/locale/ko';
 import datePick from "../../util/datePick";
-import DatePickerComponent from "../../util/datePick"; // 한국어 locale import
+import DatePickerComponent from "../../util/datePick";
+import { orderApi } from "../orderTable"; // 한국어 locale import
 
 // 한글화된 locale 등록
 registerLocale('ko', ko);
@@ -97,7 +98,7 @@ const OrderInsertModal = ({
     };
 
     const result = await axios.post<insertParamType>(
-      "http://localhost:3586/order",
+      orderApi,
       insertParam
     );
     onClose();

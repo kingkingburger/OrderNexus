@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import axios from "axios";
 import InputField from "../../util/inputField";
-import { Company, Order } from "../orderTable";
+import { Company, Order, orderApi } from "../orderTable";
 import Select, { ActionMeta, SingleValue } from "react-select";
 import DatePickerComponent from "../../util/datePick";
 import { companyApi } from "../../company/companyTable";
@@ -117,7 +117,7 @@ const OrderUpdateModal = ({
     };
 
     await axios.put<updateParamType>(
-      `http://localhost:3586/order/${updatedId}`,
+      `${orderApi}/${updatedId}`,
       updateParam
     );
     // 부모 컴포넌트에게 update되었다고 알리기 위함

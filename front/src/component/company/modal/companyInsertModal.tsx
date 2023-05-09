@@ -67,7 +67,7 @@ const CompanyInsertModal = ({
     };
 
     await axios.post<insertParamType>(
-      "http://localhost:3586/company",
+      `${process.env.API_ADDRESS}/company`,
       insertParam
     );
     resetStates();

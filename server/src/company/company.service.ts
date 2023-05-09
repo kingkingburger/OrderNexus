@@ -22,15 +22,16 @@ export class CompanyService {
     const where = {};
     // 기간 설정
     if (params.DateFrom && params.DateTo) {
-      where["createdAt"] = Between(params.DateFrom, params.DateTo); // 'between' 검색
+      where["orders.orderDate"] = Between(params.DateFrom, params.DateTo); // 'between' 검색
     } else if (params.DateFrom) {
-      where["createdAt"] = MoreThanOrEqual(params.DateFrom); // '>=' 검색
+      where["orders.orderDate"] = MoreThanOrEqual(params.DateFrom); // '>=' 검색
     } else if (params.DateTo) {
-      where["createdAt"] = LessThanOrEqual(params.DateTo); // '<=' 검색
+      where["orders.orderDate"] = LessThanOrEqual(params.DateTo); // '<=' 검색
     }
+    console.log("where = ", where);
     return this.companyRepository.find({
-      relations: ["orders"],
-      where: { ...where }
+      where: where,
+      relations: ["orders"]
     });
   }
 

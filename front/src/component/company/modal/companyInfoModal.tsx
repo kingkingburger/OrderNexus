@@ -1,5 +1,5 @@
 import ReactModal from "react-modal";
-import { Company, Order } from "../companyTable";
+import { Company, companyApi, Order } from "../companyTable";
 import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel } from "devextreme-react/data-grid";
 import React, { useEffect, useState } from "react";
 import { orderTableInfoColumn } from "../../order/column/orderTableInfoColumn";
@@ -10,6 +10,7 @@ import { Export } from "devextreme-react/chart";
 import { Button, Col, Row } from "react-bootstrap";
 import { getMonthStartEndDateTime } from "../../util/lib/dateRelated";
 import DatePickerComponent from "../../util/datePick";
+import axios from "axios";
 
 interface MyModalProps {
   isOpen: boolean;
@@ -24,21 +25,31 @@ const CompanyInfoModal = ({
                             onClose,
                             onSubmit,
                             title,
-                            data
+                            data // table에서 넘어온 row의 정보
                           }: MyModalProps) => {
   const [column, setColumn] = useState<Array<ColumnType>>([]);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [clickRow, setClickRow] = useState({} as Company);
   const [total, setTotal] = useState(0);
-  console.log('data.orders = ' , data.orders);
-  const [duplicateInfo, setDuplicateInfo] = useState<Order[]>(data.orders || []);
-
+  const [duplicateInfo, setDuplicateInfo] = useState<Order[]>([]);
   // 기간설정 state
   const {monthStart, monthEnd} = getMonthStartEndDateTime()
   const [orderDateFrom, setOrderDateFrom] = useState(monthStart || "");
   const [orderDateTo, setOrderDateTo] = useState(monthEnd || "");
 
+  // props의 값을 state로 옮기기 위한 과정
+  useEffect(() =>{
+    if(data.orders) {
+      const getInfoFromId = async () =>{
+        const result =  await axios.get<Company>(`${companyApi}/${data.id}`)
+        // duplicate라는 state로 info data 이동
+        setDuplicateInfo(result.data.orders as Order[]);
+      }
+      getInfoFromId()
+    }
+  },[data.id]);
+  
   // infoData 넘어온거 깊은복사 과정
   const jsonStr2 = JSON.stringify(data, null, 2);
   const infoData = JSON.parse(jsonStr2) as Company;
@@ -84,12 +95,12 @@ const CompanyInfoModal = ({
   // 총합을 구하기 위함
   useEffect(() => {
     if (infoData.orders) {
-      const sum = infoData.orders.reduce((acc, cur) => {
+      const sum = duplicateInfo.reduce((acc, cur) => {
         return acc + Number(cur.resultPrice);
       }, 0);
       setTotal(sum);
     }
-  }, [data]);
+  }, [duplicateInfo]);
 
   const handleDateFrom = (date: Date | null) => { // 선택된 날짜의 타입을 Date | null로 지정
     setOrderDateFrom(date?.toISOString() || "");
@@ -100,20 +111,20 @@ const CompanyInfoModal = ({
 
   // 필터링된 row만 보여주기 위함
   const selectDate = () =>{
-    if(data.orders){
-      const filteredDate = data.orders.filter((order) =>{
-        const orderDate = new Date(order.orderDate);
-        const from = new Date(orderDateFrom)
-        const to = new Date(orderDateTo)
-        if (orderDateFrom && orderDateTo) {
-          // orderDateFrom과 orderDateTo가 모두 있는 경우
-          return orderDate >= from && orderDate <= to;
-        } else {
-          return false; // 필터 조건이 없으면 false 반환해서 해당 주문은 제외
-        }
-      })
-      setDuplicateInfo(filteredDate);
-    }
+    // if(data.orders){
+    //   const filteredDate = duplicateInfo.filter((order) =>{
+    //     const orderDate = new Date(order.orderDate);
+    //     const from = new Date(orderDateFrom)
+    //     const to = new Date(orderDateTo)
+    //     if (orderDateFrom && orderDateTo) {
+    //       // orderDateFrom과 orderDateTo가 모두 있는 경우
+    //       return orderDate >= from && orderDate <= to;
+    //     } else {
+    //       return false; // 필터 조건이 없으면 false 반환해서 해당 주문은 제외
+    //     }
+    //   })
+    //   setDuplicateInfo(filteredDate);
+    // }
   }
   
   return (

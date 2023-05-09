@@ -57,7 +57,7 @@ export interface ColumnType {
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
 
-export const orderApi = "http://localhost:3586/order";
+export const orderApi = `${process.env.API_ADDRESS}/order`;
 
 const OrderTable = () => {
   const [row, setRow] = useState<any>([]); // 4번)

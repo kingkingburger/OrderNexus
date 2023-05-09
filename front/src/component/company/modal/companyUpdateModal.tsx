@@ -80,7 +80,7 @@ const CompanyUpdateModal = ({
     };
 
     await axios.put<updateParamType>(
-      `http://localhost:3586/company/${updatedId}`,
+      `${process.env.API_ADDRESS}/company/${updatedId}`,
       updateParam
     );
     // 부모 컴포넌트에게 update되었다고 알리기 위함
