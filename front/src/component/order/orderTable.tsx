@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { ColumnChooser, DataGrid, Editing, Grouping, GroupPanel, SearchPanel } from "devextreme-react/data-grid";
+import {
+  ColumnChooser,
+  DataGrid,
+  Editing,
+  Grouping,
+  GroupPanel,
+  SearchPanel,
+  Summary
+} from "devextreme-react/data-grid";
 import axios from "axios";
 import { DataType, HorizontalAlignment } from "devextreme/common";
 import { Format } from "devextreme/localization";
@@ -72,6 +80,24 @@ const OrderTable = () => {
   const [orderDateFrom, setOrderDateFrom] = useState(monthStart || "");
   const [orderDateTo, setOrderDateTo] = useState(monthEnd || "");
 
+  const summary  = {
+    groupItems: [
+      {
+        column: 'resultPrice',
+        summaryType: 'sum',
+        displayFormat: '총합group',
+        // valueFormat: { type: 'fixedPoint', precision: 1 }
+      }
+    ],
+    totalItems: [
+      {
+        column: 'resultPrice',
+        summaryType: 'sum',
+        displayFormat: '총합total',
+        // valueFormat: { type: 'fixedPoint', precision: 1 }
+      }
+    ]
+  }
   //모달열기
   const openModal = (e: any) => {
     setShowModal(true);
@@ -146,6 +172,7 @@ const OrderTable = () => {
       <DataGrid
         dataSource={row}
         columns={column}
+        summary={summary}
         allowColumnResizing={true}
         allowColumnReordering={true}
         hoverStateEnabled={true}
@@ -167,6 +194,7 @@ const OrderTable = () => {
         <Export enabled={true} fileName={"주문관리"}></Export>
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
         <SearchPanel width={"250"} placeholder={"검색"} visible={true} />
+       <Summary groupItems={summary.groupItems} totalItems={summary.totalItems}/>
       </DataGrid>
 
       <OrderInsertModal
