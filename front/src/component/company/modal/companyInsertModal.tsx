@@ -67,7 +67,7 @@ const CompanyInsertModal = ({
     };
 
     await axios.post<insertParamType>(
-      `${companyApi}company`,
+      `${companyApi}`,
       insertParam
     );
     resetStates();
