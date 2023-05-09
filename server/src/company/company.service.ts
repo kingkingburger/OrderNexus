@@ -54,7 +54,7 @@ export class CompanyService {
             DateTo: params.DateTo
           }
         )
-        .getMany()
+        .getOne()
     );
   }
 

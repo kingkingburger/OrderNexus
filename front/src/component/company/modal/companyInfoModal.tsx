@@ -34,22 +34,24 @@ const CompanyInfoModal = ({
   const [total, setTotal] = useState(0);
   const [duplicateInfo, setDuplicateInfo] = useState<Order[]>([]);
   // 기간설정 state
-  const {monthStart, monthEnd} = getMonthStartEndDateTime()
+  const { monthStart, monthEnd } = getMonthStartEndDateTime();
   const [orderDateFrom, setOrderDateFrom] = useState(monthStart || "");
   const [orderDateTo, setOrderDateTo] = useState(monthEnd || "");
 
   // props의 값을 state로 옮기기 위한 과정
-  useEffect(() =>{
-    if(data.orders) {
-      const getInfoFromId = async () =>{
-        const result =  await axios.get<Company>(`${companyApi}/${data.id}`)
+  useEffect(() => {
+    if (data.orders) {
+      const getInfoFromId = async () => {
+        const result = await axios.get<Company>(`${companyApi}/${data.id}`, {
+          params: { DateFrom: monthStart, DateTo: monthEnd }
+        });
         // duplicate라는 state로 info data 이동
         setDuplicateInfo(result.data.orders as Order[]);
-      }
-      getInfoFromId()
+      };
+      getInfoFromId();
     }
-  },[data.id]);
-  
+  }, [data.id]);
+
   // infoData 넘어온거 깊은복사 과정
   const jsonStr2 = JSON.stringify(data, null, 2);
   const infoData = JSON.parse(jsonStr2) as Company;
@@ -110,23 +112,19 @@ const CompanyInfoModal = ({
   };
 
   // 필터링된 row만 보여주기 위함
-  const selectDate = () =>{
-    // if(data.orders){
-    //   const filteredDate = duplicateInfo.filter((order) =>{
-    //     const orderDate = new Date(order.orderDate);
-    //     const from = new Date(orderDateFrom)
-    //     const to = new Date(orderDateTo)
-    //     if (orderDateFrom && orderDateTo) {
-    //       // orderDateFrom과 orderDateTo가 모두 있는 경우
-    //       return orderDate >= from && orderDate <= to;
-    //     } else {
-    //       return false; // 필터 조건이 없으면 false 반환해서 해당 주문은 제외
-    //     }
-    //   })
-    //   setDuplicateInfo(filteredDate);
-    // }
-  }
-  
+  const selectDate = () => {
+    if(duplicateInfo){
+      const getInfoFromId = async () => {
+        const result = await axios.get<Company>(`${companyApi}/${data.id}`, {
+          params: { DateFrom: orderDateFrom, DateTo: orderDateTo }
+        });
+        // duplicate라는 state로 info data 이동
+        setDuplicateInfo(result.data.orders as Order[]);
+      };
+      getInfoFromId();
+    }
+  };
+
   return (
     <ReactModal
       isOpen={isOpen}
@@ -151,11 +149,11 @@ const CompanyInfoModal = ({
       <Row xs={2} md={4} lg={6}>
         <Col>
           <div>시작일</div>
-          <DatePickerComponent  onDateChange={handleDateFrom} dateParams={new Date(orderDateFrom)}/>
+          <DatePickerComponent onDateChange={handleDateFrom} dateParams={new Date(orderDateFrom)} />
         </Col>
         <Col>
           <div>종료일</div>
-          <DatePickerComponent  onDateChange={handleDateTo} dateParams={new Date(orderDateTo)}/>
+          <DatePickerComponent onDateChange={handleDateTo} dateParams={new Date(orderDateTo)} />
         </Col>
         <Col>
           <Button onClick={selectDate}>검색</Button>
@@ -186,7 +184,7 @@ const CompanyInfoModal = ({
         <ColumnChooser enabled={true} mode={"select"}></ColumnChooser>
       </DataGrid>
 
-      <Button variant="warning" size="lg" disabled >총합 : {total}</Button>
+      <Button variant="warning" size="lg" disabled>총합 : {total}</Button>
 
       {/*<div className={styles.totalCount}> 총합 : {total}</div>*/}
       <button onClick={onSubmit}>확인</button>
