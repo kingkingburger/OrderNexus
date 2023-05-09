@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
-import { Company, Order } from "../orderTable";
+import { Company, Order, orderApi } from "../orderTable";
 
 interface MyModalProps {
   isOpen: boolean;
@@ -41,7 +41,7 @@ const OrderDeleteModal = ({
   const deleteAction = async () => {
     const deletedId = data.id;
     await axios.delete<deleteParamType>(
-      `${process.env.API_ADDRESS}/order/${deletedId}`
+      `${orderApi}/${deletedId}`
     );
 
     // 부모 컴포넌트에게 delete되었다고 알리기 위함

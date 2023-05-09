@@ -28,7 +28,6 @@ export class CompanyService {
     } else if (params.DateTo) {
       where["orders.orderDate"] = LessThanOrEqual(params.DateTo); // '<=' 검색
     }
-    console.log("where = ", where);
     return this.companyRepository.find({
       where: where,
       relations: ["orders"]

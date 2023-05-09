@@ -55,7 +55,8 @@ interface ColumnType {
   format?: Format | string;
   cellTemplate?: (container: any, options: any) => void | undefined;
 }
-export const companyApi = `${process.env.API_ADDRESS}company`;
+
+export const companyApi = `${process.env.REACT_APP_API_ADDRESS}/company`;
 
 const CompanyTable = () => {
   const [row, setRow] = useState<any>([]);

@@ -1,4 +1,4 @@
-import { Company, Order } from "../companyTable";
+import { Company, companyApi, Order } from "../companyTable";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
@@ -80,7 +80,7 @@ const CompanyUpdateModal = ({
     };
 
     await axios.put<updateParamType>(
-      `${process.env.API_ADDRESS}/company/${updatedId}`,
+      `${companyApi}/${updatedId}`,
       updateParam
     );
     // 부모 컴포넌트에게 update되었다고 알리기 위함

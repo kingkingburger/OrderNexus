@@ -1,4 +1,4 @@
-import { Company } from "../companyTable";
+import { Company, companyApi } from "../companyTable";
 import React, { useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
@@ -40,7 +40,7 @@ const CompanyDeleteModal = ({
   const deleteAction = async () => {
     const deletedId = data.id;
     await axios.delete<deleteParamType>(
-      `${process.env.API_ADDRESS}/company/${deletedId}`
+      `${companyApi}/${deletedId}`
     );
 
     // 부모 컴포넌트에게 delete되었다고 알리기 위함

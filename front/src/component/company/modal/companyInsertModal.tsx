@@ -1,4 +1,4 @@
-import { Order } from "../companyTable";
+import { companyApi, Order } from "../companyTable";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
@@ -67,7 +67,7 @@ const CompanyInsertModal = ({
     };
 
     await axios.post<insertParamType>(
-      `${process.env.API_ADDRESS}/company`,
+      `${companyApi}company`,
       insertParam
     );
     resetStates();
