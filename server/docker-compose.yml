@@ -13,7 +13,7 @@ services:
       - POSTGRES_PASSWORD=1234
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8
 
-  app:
+  back:
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -28,7 +28,19 @@ services:
     ports:
       - "3586:3586"
     volumes:
-      - ./:/app/
+      - ./:/back/
+  front:
+    build:
+      context: ../front/
+      dockerfile: ../front/Dockerfile
+    environment:
+      - REACT_APP_API_ADDRESS=http://localhost:3586
+    depends_on:
+      - back
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/front/
 
 volumes:
   db_data:
