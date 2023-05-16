@@ -27,6 +27,7 @@
     "@nestjs/typeorm": "^9.0.1",
     "@types/winston": "^2.4.4",
     "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
     "nest-winston": "^1.9.1",
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
