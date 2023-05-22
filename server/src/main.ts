@@ -3,6 +3,7 @@ import { AppModule } from "./app.module";
 import * as fs from "fs";
 import * as path from "path";
 import * as dotenv from "dotenv";
+// console.log("path.join(_dir) = ", path.join(_dirname));
 async function bootstrap() {
   // const httpsOptions = {
   //   key: fs.readFileSync("./config/cert.key"),
