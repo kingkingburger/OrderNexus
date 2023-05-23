@@ -104,7 +104,6 @@ const CompanyTable = () => {
   return (
     <Container>
       <button onClick={openInsertModal}>거래처 입력</button>
-      test
       <DataGrid
         dataSource={row}
         columns={column}
