@@ -13,7 +13,8 @@ import { Order } from "./order/entities/order.entity";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true // 전역으로 사용하기
+      isGlobal: true, // 전역으로 사용하기
+      envFilePath: ".env"
     }),
 
     // [23.05.22] typeorm 설정(.env 파일을 쓰기 위함)
