@@ -1,46 +1,17 @@
 version: '3.8'
 
 services:
-  db:
-    image: postgres
-    ports:
-      - '5432:5432'
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=test
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
-
   back:
     build:
       context: .
       dockerfile: ./Dockerfile
     environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=postgres
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=1234
-    depends_on:
-      - db
+      - DB_HOST=${DATABASE_HOST}
+      - DB_PORT=${DATABASE_PORT}
+      - DB_NAME=${DATABASE_NAME}
+      - DB_USERNAME=${DATABASE_USER}
+      - DB_PASSWORD=${DATABASE_PASS}
     ports:
       - "3586:3586"
     volumes:
       - ./:/back/
-  front:
-    build:
-      context: ../front/
-      dockerfile: ../front/Dockerfile
-    environment:
-      - REACT_APP_API_ADDRESS=http://localhost:3586
-    depends_on:
-      - back
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./:/front/
-
-volumes:
-  db_data:

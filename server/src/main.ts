@@ -10,7 +10,7 @@ async function bootstrap() {
   //   cert: fs.readFileSync("./config/cert.crt")
   // };
   // .env 파일 로드
-  dotenv.config();
+  // dotenv.config();
   const app = await NestFactory.create(
     AppModule
     // , { httpsOptions }

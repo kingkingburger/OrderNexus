@@ -1,4 +1,5 @@
 import { DataSource } from "typeorm";
+import process from "process";
 
 export const databaseProviders = [
   {
@@ -6,11 +7,11 @@ export const databaseProviders = [
     useFactory: async () => {
       const dataSource = new DataSource({
         type: "postgres",
-        host: "localhost",
-        port: 5432,
-        username: "postgres",
-        password: "1234",
-        database: "postgres",
+        host: process.env.DB_HOST || "localhost",
+        port: +process.env.DB_PORT || 5432,
+        username: process.env.DB_ID || "postgres",
+        password: process.env.DB_PASS || "1234",
+        database: process.env.DB_DATABASE || "test",
         entities: [__dirname + "/../**/*.entity{.ts,.js}"],
         synchronize: true
       });
