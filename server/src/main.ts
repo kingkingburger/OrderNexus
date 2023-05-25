@@ -3,16 +3,15 @@ import { AppModule } from "./app.module";
 import * as fs from "fs";
 
 async function bootstrap() {
-  const key = fs.existsSync("/etc/letsencrypt/live/jaewon.store/privkey.pem");
-  const cert = fs.existsSync("/etc/letsencrypt/live/jaewon.store/fullchain.pem");
-
+  const env = process.env.NODE_ENV;
   const httpsOptions = {
-    key: key ? fs.readFileSync("/etc/letsencrypt/live/jaewon.store/privkey.pem") : null,
-    cert: cert ? fs.readFileSync("/etc/letsencrypt/live/jaewon.store/fullchain.pem") : null
+    key: env === "prop" ? fs.readFileSync("/etc/letsencrypt/live/jaewon.store/privkey.pem") : null,
+    cert: env === "prop" ? fs.readFileSync("/etc/letsencrypt/live/jaewon.store/fullchain.pem") : null
   };
 
+  console.log("env = ", env);
   let app;
-  if (key && cert) {
+  if (env === "prop") {
     app = await NestFactory.create(AppModule, { httpsOptions });
   } else {
     app = await NestFactory.create(AppModule);
